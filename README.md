@@ -6,13 +6,14 @@ The whole page is one file, `index.html`. Open it in a browser. There is no buil
 
 ## Sections
 
-1. **Start with one page.** One OKF file, line by line.
-2. **A folder an agent can walk.** Index files, links, and reading only what a question needs.
-3. **Who wrote it, who checked it, and is it still true.** The `generated`, `verified`, and `stale_after` lines.
-4. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
-5. **Then someone has to keep it current.** `index.md`, `log.md`, `README.md` and `AGENTS.md`, and one change followed through git.
-6. **A number that can show its work.** Attested Computations.
-7. **What it leaves out on purpose.** Non-goals, and how to start a bundle.
+1. **Why write it down this way.** Six reasons, each linked to the section that shows it.
+2. **Start with one page.** One OKF file, line by line.
+3. **A folder an agent can walk.** Index files, links, and reading only what a question needs.
+4. **Who wrote it, who checked it, and is it still true.** The `generated`, `verified`, and `stale_after` lines.
+5. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
+6. **Then someone has to keep it current.** `index.md`, `log.md`, `README.md` and `AGENTS.md`, and one change followed through git.
+7. **A number that can show its work.** Attested Computations.
+8. **What it leaves out on purpose.** Non-goals, and a brief for pointing an agent at your own source.
 
 ## Changing the example
 
@@ -25,7 +26,7 @@ Swapping the shop for another setting means rewriting those blocks and the sente
 
 ## Sources
 
-- [Open Knowledge Format specification, version 0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md) (read 2026-11-09)
+- [Open Knowledge Format specification, version 0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md) (read 2026-11-10)
 - [The OKF repository](https://github.com/GoogleCloudPlatform/open-knowledge-format), Apache 2.0 license
 
 Halfway Cycles, its staff, and its numbers are invented. This is an independent explainer and is not affiliated with Google. The page was written by an AI model directed by a person and has not yet been checked line by line against the specification.

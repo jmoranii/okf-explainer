@@ -208,6 +208,12 @@ input[type=range]{width:100%;accent-color:var(--link);margin:0}
 .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem 2.5rem;max-width:52rem}
 .cols h3{margin-bottom:.4rem}
 .cols p{font-size:1rem;line-height:1.5}
+.cols.three{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none;gap:1.5rem 2rem}
+.cols.three p{font-size:.98rem}
+.jump{display:block;font:500 .74rem/1.5 var(--mono);margin-top:.4rem;text-decoration:none}
+.jump::before{content:"\2193  "}
+.jump:hover{text-decoration:underline}
+.brief{max-width:46rem}
 ol.steps{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.55rem;max-width:39rem}
 footer{border-top:1px solid var(--rule);padding-block:2.5rem 0;display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem}
 footer .body{display:flex;flex-direction:column;gap:1.4rem;font-size:.98rem;line-height:1.55}
@@ -221,7 +227,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   .verbs{flex-direction:row;flex-wrap:wrap;width:auto;margin-top:0}
   .verbs li{flex:1 1 9rem}
   .around{grid-template-columns:minmax(0,1fr)}
-  .cols{grid-template-columns:minmax(0,1fr)}
+  .cols,.cols.three{grid-template-columns:minmax(0,1fr)}
   body{font-size:1.06rem}
   .lede{font-size:1.18rem}
 }
@@ -240,6 +246,27 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <p class="cat"><span class="prompt">$</span> <b>cat metrics/turnaround-time.md</b><br>The specification's own summary is &ldquo;If you can <code>cat</code> a file, you can read OKF.&rdquo; (<code>cat</code> is the command that prints a file to the screen.) This page walks through the format with a made-up bike shop, Halfway Cycles, and nothing that depends on one vendor's tools.</p>
   </div>
 </header>
+
+<!-- ───────────── 0. why ───────────── -->
+<section class="part" id="why" data-part="why">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>Why write it down this way</h2>
+    <div class="prose">
+      <p>Most of what an organization knows lives in people's heads, in a wiki nobody trusts, or inside a tool that only that tool can read. OKF's bet is that a folder of plain text pages does the job better. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a> Here are six reasons, each with the part of this page that shows it.</p>
+    </div>
+    <div class="fig" style="margin-top:1.6rem">
+      <div class="cols three">
+        <div><h3>Plain text, nothing to install</h3><p>Every page is a text file. Any editor opens it today, and any editor will open it in twenty years.</p><a class="jump" href="#one-file">Start with one page</a></div>
+        <div><h3>People and models read the same page</h3><p>There is no export step and no second copy to fall behind. An agent loads the file as it is, and so do you.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
+        <div><h3>Organized, and findable as it grows</h3><p>Folders, listings and links let a reader reach one page among thousands without opening the rest.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
+        <div><h3>It keeps up as things change</h3><p>An agent can draft pages and update them. Each page says who wrote it, who checked it and when it expires, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
+        <div><h3>Portable, with no lock-in</h3><p>A bundle is a folder. Copy it, zip it, or move it to another tool. No vendor's service stands between you and what you wrote.</p><a class="jump" href="#edges">What it leaves out on purpose</a></div>
+        <div><h3>Versioned, so a team stays in step</h3><p>Kept in git, every change is recorded with who made it and why, and everyone works from the same copy.</p><a class="jump" href="#upkeep">Then someone has to keep it current</a></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ───────────── 1. one file ───────────── -->
 <section class="part" id="one-file" data-part="one-file">
@@ -397,6 +424,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <div class="prose">
       <p>A first draft is the easy part. Shops change their prices, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects this. It describes knowledge that agents keep writing and rewriting, not something authored once and left alone. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
       <p>Plain text is what makes that workable. A person and a model read the same file, so the model can do the bookkeeping and the person only has to read what changed. Keep the folder in git, on GitHub or anywhere else, and every change arrives as a diff: which lines went, which came in, who made the change, and when. The specification recommends git for exactly that and does not require it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p>Git is also what keeps a team in step. Everyone, and every agent, works on a copy and sends changes back to a shared one. Two people's edits are merged, and where they collide git says so instead of quietly keeping one. A host such as GitHub adds a place to review a change before it lands. None of this is OKF's own machinery, and the specification never names a host. It comes free with being plain text.</p>
       <p>Four files around the pages do most of the housekeeping. Two belong to OKF. Two are older habits that sit comfortably beside it.</p>
     </div>
     <div class="fig" style="margin-top:1.6rem">
@@ -498,31 +526,36 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <div class="prose" style="margin-top:2.2rem">
       <h3>What teams add on top</h3>
       <p>Most teams layer house rules over the format: a fixed list of page types, a check date on single facts instead of whole pages, a rule that the log is only ever added to, a line saying which of two overlapping pages wins. None of that is in the specification, and none of it breaks it. It helps to know which rules are OKF and which are yours.</p>
-      <h3 style="margin-top:1rem">Start one in ten minutes</h3>
+      <h3 style="margin-top:1rem">Start one by pointing an agent at what you have</h3>
+      <p>You do not write the first pages by hand. You read them. The steps are the ones from the first-draft section, with your own source in place of the bike shop's.</p>
     </div>
     <div class="fig" style="margin-top:1rem">
       <ol class="steps">
-        <li>Make a folder. Write one page about the thing people ask you about most.</li>
-        <li>Give it a header with a <code>type</code>, and a one-sentence <code>description</code>.</li>
-        <li>When there are more than a handful of pages, add an <code>index.md</code> that lists them.</li>
-        <li>When an agent starts writing pages, add <code>generated</code>. When a person checks one, add <code>verified</code>.</li>
-        <li>Put a <code>stale_after</code> date on anything that goes out of date on a schedule, like prices.</li>
+        <li>Pick one source people keep asking you about: a database, a shared drive, a codebase, a wiki.</li>
+        <li>Give an agent read access to it, and the brief below. Any capable agent will do. The format does not care which.</li>
+        <li>Read what comes back. Fix what is wrong, then add a <code>verified</code> line to each page you would stand behind, and a <code>stale_after</code> date to anything that expires on a schedule, like prices.</li>
+        <li>Put the folder in git and write your house rules into an AGENTS file. From then on an update is a diff to read, not a rewrite.</li>
       </ol>
-      <div class="file" style="max-width:39rem">
-        <div class="file-tab"><span>policies/labor-rates.md</span><button class="btn" id="copy">Copy</button></div>
-        <pre class="file-body" id="starter">---
-type: Policy
-title: Labor rates
-description: What the shop charges per hour, and when work is free.
-generated: { by: human:mara, at: 2026-01-15T10:00:00Z }
-verified: { by: human:mara, at: 2026-01-15T10:00:00Z }
-stale_after: 2026-09-01T00:00:00Z
----
+      <div class="file brief">
+        <div class="file-tab"><span>brief for the agent</span><button class="btn" id="copy">Copy</button></div>
+        <pre class="file-body" id="starter">Draft an Open Knowledge Format (OKF v0.2) bundle from the source I have given you access to.
 
-Standard bench rate is $90 an hour, billed in quarter hours.
-Warranty work on parts we sold is free.
-See the [warranty playbook](/playbooks/warranty-claim.md).</pre>
+1. List what the source contains, and tell me what you found before you write anything.
+
+2. For each thing worth describing, write one markdown file with a YAML header: type, title, a one-sentence description, and generated: { by: your name and version, at: the time now in UTC }.
+
+3. In the body, say what it is and how it is used. Link to related pages with ordinary markdown links. Do not invent details. Where you are unsure, say so on the page.
+
+4. List where each page's content came from under sources in the header. Every entry needs a resource: a URL, a path, or a plain description of what you read.
+
+5. Do not add a verified line. A person does that after reading.
+
+6. When the pages are done, write an index.md in every folder, one line per page using its description, and start a log.md with today's date as the first heading.
+
+The specification is at https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md
+Follow it wherever this brief is silent.</pre>
       </div>
+      <p class="cap">This brief was written for this page as a starting point. It is not part of the specification. The OKF repository's sample agent works from a longer one. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/prompts/reference_instruction.md">sample agent's instructions</a></p>
     </div>
   </div>
 </section>
@@ -551,17 +584,18 @@ var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").
 var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
-var WRITTEN="2026-11-10T17:46:00Z";
+var WRITTEN="2026-11-10T18:01:00Z";
 
 /* ───────── the essay as a bundle: section headers ───────── */
 var PARTS={
+  "why":{title:"Why write it down this way",desc:"What a folder of plain text pages gets you, and where this page shows each point.",src:["1","README"]},
   "one-file":{title:"Start with one page",desc:"What a single OKF concept looks like, line by line.",src:["4","5","11"]},
   "the-folder":{title:"A folder an agent can walk",desc:"Bundles, index files, links between pages, and reading only what a question needs.",src:["3","6","8","9"]},
   "trust":{title:"Who wrote it, who checked it, and is it still true",desc:"The generated, verified, and stale_after lines, and the trust levels readers derive.",src:["5","7"]},
   "first-draft":{title:"Letting an agent write the first draft",desc:"The explore-and-draft pattern from the sample agent, generalized beyond one database.",src:["README","base.py"]},
   "upkeep":{title:"Then someone has to keep it current",desc:"Index and log files, README and AGENTS files, and one change followed through git.",src:["1","3","5","8","9","11"]},
   "numbers":{title:"A number that can show its work",desc:"Attested Computations: approved calculations and a mechanical check that they ran.",src:["10"]},
-  "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start.",src:["1","11"]}
+  "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start one with an agent.",src:["1","11"]}
 };
 Object.keys(PARTS).forEach(function(id){
   var p=PARTS[id], sec=document.querySelector('[data-part="'+id+'"]'), rail=sec.querySelector(".rail");
@@ -1077,6 +1111,14 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   $("n-bad").addEventListener("click",function(){way="bad"; runs++; draw();});
   draw();
 })();
+
+/* ───────── jumps from the opening section ───────── */
+document.querySelectorAll("a.jump").forEach(function(a){
+  a.addEventListener("click",function(e){
+    var t=$(a.getAttribute("href").slice(1)); if(!t)return;
+    e.preventDefault(); t.scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});
+  });
+});
 
 /* ───────── copy ───────── */
 $("copy").addEventListener("click",function(){
