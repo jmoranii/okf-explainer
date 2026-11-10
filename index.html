@@ -168,6 +168,32 @@ input[type=range]{width:100%;accent-color:var(--link);margin:0}
 .around li span{color:var(--ink-2)}
 .status{font:500 .8rem/1.5 var(--mono);min-height:1.5em}
 
+/* 5. upkeep */
+.whose{font-size:.58rem;vertical-align:.2em;margin-left:.5rem;color:var(--ink-2)}
+.whose.in{color:var(--ink)}
+.ask{font:400 1.02rem/1.5 var(--body);border-left:3px solid var(--link);padding:.1rem 0 .1rem .9rem;max-width:39rem;margin:0}
+.ask .c{display:block;font:500 .74rem var(--mono);margin-bottom:.15rem}
+.u-two{grid-template-columns:minmax(0,.85fr) minmax(0,1.25fr)}
+.u-msg{font:600 .86rem/1.4 var(--mono);padding:.7rem .9rem .1rem;margin:0}
+.flist{list-style:none;margin:0;padding:.2rem .5rem .6rem}
+.flist .grp{font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:.6rem .4rem .25rem}
+.frow{display:grid;grid-template-columns:4.4em minmax(0,1fr) auto;gap:.5rem;align-items:baseline;width:100%;text-align:left;background:none;border:0;border-radius:4px;padding:.32rem .4rem;font:400 .78rem/1.4 var(--mono);color:var(--ink);cursor:pointer}
+.frow:hover{background:var(--link-wash)}
+.frow[aria-pressed="true"]{background:var(--link);color:var(--sheet)}
+.frow .fk{color:var(--ink-2);font-size:.7rem}
+.frow .fn{overflow-wrap:anywhere}
+.plus{color:var(--human)} .minus{color:var(--stale)}
+.frow[aria-pressed="true"] .fk,.frow[aria-pressed="true"] .plus,.frow[aria-pressed="true"] .minus{color:inherit}
+.u-after{border-top:1px solid var(--rule);padding:.7rem .9rem .8rem}
+.u-after .lab{font:500 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:.45rem}
+.u-after ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.u-after li{display:flex;flex-wrap:wrap;gap:.3rem .6rem;align-items:center;font:400 .76rem var(--mono)}
+.u-after .st{display:inline-flex;flex-wrap:wrap;gap:.3rem}
+.t-ink{color:var(--ink)}
+.dl{display:block;white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.7em;padding:0 .9rem 0 calc(.9rem + 2ch);text-indent:-2ch}
+.dl.add{background:color-mix(in srgb,var(--human) 15%,var(--sheet))}
+.dl.del{background:color-mix(in srgb,var(--stale) 15%,var(--sheet))}
+
 /* 6. numbers */
 .sql{display:block;white-space:pre-wrap;overflow-wrap:anywhere;padding:0 .9rem 0 calc(.9rem + 4ch);text-indent:-4ch}
 .sql.diff{background:color-mix(in srgb,var(--stale) 16%,var(--sheet));color:var(--stale)}
@@ -363,7 +389,56 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   </div>
 </section>
 
-<!-- ───────────── 5. numbers ───────────── -->
+<!-- ───────────── 5. upkeep ───────────── -->
+<section class="part" id="upkeep" data-part="upkeep">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>Then someone has to keep it current</h2>
+    <div class="prose">
+      <p>A first draft is the easy part. Shops change their prices, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects this. It describes knowledge that agents keep writing and rewriting, not something authored once and left alone. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
+      <p>Plain text is what makes that workable. A person and a model read the same file, so the model can do the bookkeeping and the person only has to read what changed. Keep the folder in git, on GitHub or anywhere else, and every change arrives as a diff: which lines went, which came in, who made the change, and when. The specification recommends git for exactly that and does not require it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p>Four files around the pages do most of the housekeeping. Two belong to OKF. Two are older habits that sit comfortably beside it.</p>
+    </div>
+    <div class="fig" style="margin-top:1.6rem">
+      <div class="cols">
+        <div><h3><code>index.md</code><span class="stamp whose in">Part of OKF</span></h3><p>For anyone looking for a page. One line per page in its folder, so a reader can choose without opening everything. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#8-index-files">§8</a></p></div>
+        <div><h3><code>log.md</code><span class="stamp whose in">Part of OKF</span></h3><p>For anyone asking what changed. Dated entries, newest first. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#9-log-files">§9</a></p></div>
+        <div><h3><code>README.md</code><span class="stamp whose">Not OKF</span></h3><p>For a person arriving cold. What the folder is and how to use it. A habit from sharing code that is far older than OKF.</p></div>
+        <div><h3><code>AGENTS.md</code><span class="stamp whose">Not OKF</span></h3><p>For the agent that maintains the folder. The house rules: what to update, and what to leave to a person. An open convention borrowed from coding tools. <a class="ref" href="https://agents.md/">agents.md</a></p></div>
+      </div>
+      <p class="cap">OKF treats every other <code>.md</code> file inside a bundle as a page. A README or AGENTS file kept inside one needs the same one-line <code>type</code> header as any page. The alternative is to keep both one folder above the bundle. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a></p>
+    </div>
+    <div class="prose" style="margin-top:2.2rem">
+      <p>Here is one change, followed all the way through. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words. Select a file to see what happened to it.</p>
+    </div>
+    <div class="fig">
+      <p class="ask"><span class="c">Mara, to the agent</span>&ldquo;We take e-bikes from this week. $110 an hour. Write up how we handle them.&rdquo;</p>
+      <div class="seg" role="group" aria-label="Which commit to show" id="u-seg"></div>
+      <div class="two u-two">
+        <div class="file">
+          <div class="file-tab"><span id="u-who"></span><span id="u-when"></span></div>
+          <p class="u-msg" id="u-msg"></p>
+          <ul class="flist" id="u-files"></ul>
+          <div class="u-after"><div class="lab">What a reader sees after this commit</div><ul id="u-after"></ul></div>
+        </div>
+        <div class="fig">
+          <div class="file">
+            <div class="file-tab"><span id="u-name"></span><span id="u-kind"></span></div>
+            <div class="file-body" id="u-diff"></div>
+          </div>
+          <div class="note" id="u-note" aria-live="polite"></div>
+        </div>
+      </div>
+      <p class="cap">A commit is one saved set of changes in git. Lines marked + were added and lines marked &minus; were removed. &ldquo;Edited since its check&rdquo; is not an OKF trust level. It is what a careful reader works out by comparing the two dates in the header.</p>
+    </div>
+    <div class="prose">
+      <p>Notice what the agent left alone: the sign-off and the expiry date. Nothing in OKF stops an agent from rewriting them. The format records who wrote a page and who checked it, and leaves the question of who is allowed to do which to you. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#52-trust-generated-and-verified">§5.2</a> That is why the rule sits in the shop's AGENTS file and not in the specification.</p>
+      <p>The review cost Mara one screen. She read two short diffs, not the whole folder, and her approval is a commit like any other: dated, attributed, and easy to undo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 6. numbers ───────────── -->
 <section class="part" id="numbers" data-part="numbers">
   <div class="rail"></div>
   <div class="body">
@@ -404,7 +479,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   </div>
 </section>
 
-<!-- ───────────── 6. edges ───────────── -->
+<!-- ───────────── 7. edges ───────────── -->
 <section class="part" id="edges" data-part="edges">
   <div class="rail"></div>
   <div class="body">
@@ -453,21 +528,16 @@ See the [warranty playbook](/playbooks/warranty-claim.md).</pre>
 </section>
 
 <footer>
-  <div class="rail" style="position:static"><span class="path">essay/<b>index.md</b></span></div>
+  <div class="rail" style="position:static"></div>
   <div class="body">
-    <div>
-      <h3>This page is its own example</h3>
-      <p style="max-width:39rem;margin-top:.4rem">Each section above carries a header the way an OKF page would. Open one with the link in the left margin. The page was written by an AI model directed by a person, and no person has signed it off in the header yet, so by OKF's own rule it is <span class="stamp t-none">unverified</span>. Check anything that matters against the specification.</p>
-    </div>
-    <pre class="hdr" id="self-index" style="font-size:.76rem"></pre>
     <div>
       <h3>Sources</h3>
       <ul>
-        <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md">Open Knowledge Format specification, version 0.2</a> (read 2026-11-09)</li>
+        <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md">Open Knowledge Format specification, version 0.2</a> (read 2026-11-10)</li>
         <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format">The OKF repository</a>, including the sample agent and four sample bundles. Apache 2.0 license.</li>
       </ul>
     </div>
-    <p class="cap">Halfway Cycles, its staff, and its numbers are invented for this explainer. This is an independent explainer and is not affiliated with Google.</p>
+    <p class="cap">Halfway Cycles, its staff, and its numbers are invented for this explainer. This is an independent explainer and is not affiliated with Google. It was written by an AI model directed by a person and has not been checked line by line against the specification, so check anything that matters against the source.</p>
   </div>
 </footer>
 
@@ -481,7 +551,7 @@ var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").
 var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
-var WRITTEN="2026-11-10T03:32:00Z";
+var WRITTEN="2026-11-10T17:46:00Z";
 
 /* ───────── the essay as a bundle: section headers ───────── */
 var PARTS={
@@ -489,6 +559,7 @@ var PARTS={
   "the-folder":{title:"A folder an agent can walk",desc:"Bundles, index files, links between pages, and reading only what a question needs.",src:["3","6","8","9"]},
   "trust":{title:"Who wrote it, who checked it, and is it still true",desc:"The generated, verified, and stale_after lines, and the trust levels readers derive.",src:["5","7"]},
   "first-draft":{title:"Letting an agent write the first draft",desc:"The explore-and-draft pattern from the sample agent, generalized beyond one database.",src:["README","base.py"]},
+  "upkeep":{title:"Then someone has to keep it current",desc:"Index and log files, README and AGENTS files, and one change followed through git.",src:["1","3","5","8","9","11"]},
   "numbers":{title:"A number that can show its work",desc:"Attested Computations: approved calculations and a mechanical check that they ran.",src:["10"]},
   "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start.",src:["1","11"]}
 };
@@ -503,7 +574,6 @@ Object.keys(PARTS).forEach(function(id){
   var b=rail.querySelector("button"), pre=rail.querySelector("pre"); pre.textContent=y;
   b.addEventListener("click",function(){var open=pre.hidden; pre.hidden=!open; b.setAttribute("aria-expanded",String(open)); b.textContent=open?"Hide header":"Show header";});
 });
-$("self-index").textContent="# A folder that knows what it knows\n\n"+Object.keys(PARTS).map(function(id){return "* ["+PARTS[id].title+"]("+id+".md) - "+PARTS[id].desc}).join("\n");
 
 /* ───────── the bike shop bundle ───────── */
 var DIRS=[
@@ -897,7 +967,91 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   pick(0,false);
 })();
 
-/* ───────── 5. numbers ───────── */
+/* ───────── 5. upkeep ───────── */
+(function(){
+  var LR="policies/labor-rates.md", EB="playbooks/e-bike-service.md", PI="playbooks/index.md", LG="log.md", RM="README.md", AM="AGENTS.md";
+  var ref=function(h,t){return ' <a class="ref" href="'+SPEC+"#"+h+'">'+t+"</a>"};
+  var STAMP={human:["t-human","human-reviewed"],none:["t-none","unverified"],stale:["t-stale","stale"],edited:["t-ink","edited since its check"]};
+  // each diff line starts with "+", "-" or a space, the way git prints one
+  var README=[" ---"," type: Readme"," title: Halfway Cycles, written down"," ---"," "," This folder is what the shop knows: its tables, its numbers,"," its playbooks and its rules. Every page is a plain text file."," ",
+    " - Looking for something? Start at index.md."," - Wondering what changed? Read log.md."," - Want to change something? Edit the page, or ask the shop agent."," - Mara signs off anything under policies/."];
+  var AGENTS=[" ---"," type: Agent Instructions"," title: How to maintain this bundle"," ---"," "," Read this before you change anything."," ",
+    " - Stamp every page you write or change with a `generated` line:","   your name and the time.",
+    " - Leave `verified` and `stale_after` alone. A person sets those","   after reading your change.",
+    " - Rebuild the index.md of any folder you touched.",
+    " - Add a dated line to log.md for every change, newest date first.",
+    " - One request, one commit. Say what changed and why.",
+    " - Never delete a page. Set `status: deprecated` and ask Mara."];
+  var EBHEAD=["---","type: Playbook","title: E-bike service","description: How the shop handles bikes with motors and batteries.","generated: { by: shop-agent/1.0, at: 2026-11-10T15:04:00Z }"];
+  var EBBODY=["---","","1. Check the battery for swelling or damage before the bike comes inside.","2. Log the job in [work orders](/tables/work_orders.md) with the motor brand.","3. Bill at the e-bike rate in [labor rates](/policies/labor-rates.md)."];
+  var pre=function(a,s){return a.map(function(l){return s+l})};
+  var U=[
+    {tab:"1. The agent's change", who:"shop-agent/1.0", when:"10 Nov 2026, 15:04", msg:"Add e-bike service and its labor rate", first:LR,
+     read:[AM,RM], changed:[[LR,"changed"],[EB,"new"],[PI,"changed"],[LG,"changed"]],
+     after:[[LR,["human","stale","edited"]],[EB,["none"]]],
+     diff:(function(){var d={};
+       d[RM]=README; d[AM]=AGENTS;
+       d[LR]=[" ---"," type: Policy"," title: Labor rates"," description: What the shop charges per hour, and when work is free.",
+         "-generated: { by: human:mara, at: 2026-01-15T10:00:00Z }","+generated: { by: shop-agent/1.0, at: 2026-11-10T15:04:00Z }",
+         " verified: { by: human:mara, at: 2026-01-15T10:00:00Z }"," stale_after: 2026-09-01T00:00:00Z"," ---"," ",
+         " Standard bench rate is $90 an hour, billed in quarter hours.",
+         "+E-bike work is $110 an hour. See the [e-bike playbook](/playbooks/e-bike-service.md).",
+         " Warranty work on parts we sold is free."," See the [warranty playbook](/playbooks/warranty-claim.md)."];
+       d[EB]=pre(EBHEAD.concat(EBBODY),"+");
+       d[PI]=[" # playbooks"," * [Spring tune-up](spring-tune-up.md) - "+C["playbooks/spring-tune-up"].desc," * [Warranty claim](warranty-claim.md) - "+C["playbooks/warranty-claim"].desc,
+         "+* [E-bike service](e-bike-service.md) - How the shop handles bikes with motors and batteries."];
+       d[LG]=[" # Halfway Cycles update log"," ","+## 2026-11-10","+* **Creation**: Added the [e-bike service playbook](/playbooks/e-bike-service.md).","+* **Update**: Added the e-bike rate to [labor rates](/policies/labor-rates.md).","+",
+         " ## 2026-03-10"," * **Update**: Dev checked the [spring tune-up](/playbooks/spring-tune-up.md) checklist."," ",
+         " ## 2026-02-10"," * **Creation**: First draft of the tables and metrics, written from the shop database."," ",
+         " ## 2026-01-15"," * **Initialization**: Mara wrote [labor rates](/policies/labor-rates.md), the first page."];
+       return d;})(),
+     note:(function(){var n={};
+       n[AM]='<span class="mono">AGENTS.md &middot; not part of OKF</span>The house rules, and the first thing the agent reads. Everything in this file is the shop\'s own choice. OKF says nothing about who may write which line.';
+       n[RM]='<span class="mono">README.md &middot; not part of OKF</span>The front door for people. The agent reads it and leaves it alone. It carries a one-line header only because it sits inside the bundle.';
+       n[LR]='<span class="mono">a page, changed by the agent</span>The agent added the rate and stamped <code>generated</code> with its own name. It left the owner\'s two lines alone, so the January sign-off now sits above a sentence Mara has not read. OKF allows that. The two lines are independent, and a reader spots the gap by comparing their dates.'+ref("52-trust-generated-and-verified","§5.2");
+       n[EB]='<span class="mono">a new page</span>It has no <code>verified</code> line, so every reader treats it as unverified until someone checks it.'+ref("53-trust-tiers","§5.3");
+       n[PI]='<span class="mono">index.md &middot; part of OKF</span>One new line, reusing the new page\'s own description so the listing matches the page. Most agents rebuild this file instead of editing it by hand.'+ref("8-index-files","§8");
+       n[LG]='<span class="mono">log.md &middot; part of OKF</span>A new dated heading at the top, one line per change. The bold first word is a habit, not a rule.'+ref("9-log-files","§9");
+       return n;})()},
+    {tab:"2. The owner's sign-off", who:"Mara", when:"10 Nov 2026, 17:30", msg:"Sign off the e-bike pages. Rates hold until next September.", first:LR,
+     read:[], changed:[[LR,"changed"],[EB,"changed"]],
+     after:[[LR,["human"]],[EB,["human"]]],
+     diff:(function(){var d={};
+       d[LR]=[" ---"," type: Policy"," title: Labor rates"," description: What the shop charges per hour, and when work is free."," generated: { by: shop-agent/1.0, at: 2026-11-10T15:04:00Z }",
+         "-verified: { by: human:mara, at: 2026-01-15T10:00:00Z }","-stale_after: 2026-09-01T00:00:00Z",
+         "+verified:","+  - { by: human:mara, at: 2026-01-15T10:00:00Z }","+  - { by: human:mara, at: 2026-11-10T17:30:00Z }","+stale_after: 2027-09-01T00:00:00Z",
+         " ---"," "," Standard bench rate is $90 an hour, billed in quarter hours."," E-bike work is $110 an hour. See the [e-bike playbook](/playbooks/e-bike-service.md)."," Warranty work on parts we sold is free."," See the [warranty playbook](/playbooks/warranty-claim.md)."];
+       d[EB]=pre(EBHEAD," ").concat(["+verified: { by: human:mara, at: 2026-11-10T17:30:00Z }"],pre(EBBODY," "));
+       return d;})(),
+     note:(function(){var n={};
+       n[LR]='<span class="mono">a page, signed off by a person</span>Mara read the diff, agreed, and added a second check beside the first. She also moved the expiry date out a year. The page is human-reviewed and current again.'+ref("52-trust-generated-and-verified","§5.2");
+       n[EB]='<span class="mono">a page, signed off by a person</span>One line added. The page moves from unverified to human-reviewed.'+ref("53-trust-tiers","§5.3");
+       return n;})()}
+  ];
+  var ci=0, cur=U[0].first;
+  var stats=function(lines){var a=0,d=0; lines.forEach(function(l){if(l.charAt(0)==="+")a++; else if(l.charAt(0)==="-")d++;}); return [a,d]};
+  var count=function(s){return (s[0]?'<span class="plus">+'+s[0]+"</span>":"")+(s[0]&&s[1]?" ":"")+(s[1]?'<span class="minus">−'+s[1]+"</span>":"")};
+  $("u-seg").innerHTML=U.map(function(c,i){return '<button class="btn" data-i="'+i+'" aria-pressed="false">'+esc(c.tab)+"</button>"}).join("");
+  function render(){
+    var c=U[ci];
+    $("u-seg").querySelectorAll("button").forEach(function(b,i){b.setAttribute("aria-pressed",String(i===ci))});
+    $("u-who").textContent="commit by "+c.who; $("u-when").textContent=c.when; $("u-msg").textContent=c.msg;
+    var row=function(f,kind){return '<li><button class="frow" data-f="'+f+'" aria-pressed="'+(f===cur)+'"><span class="fk">'+kind+'</span><span class="fn">'+esc(f)+'</span><span class="fc">'+count(stats(c.diff[f]))+"</span></button></li>"};
+    $("u-files").innerHTML=(c.read.length?'<li class="grp">Read first, not changed</li>'+c.read.map(function(f){return row(f,"read")}).join(""):"")+
+      '<li class="grp">Changed in this commit</li>'+c.changed.map(function(x){return row(x[0],x[1])}).join("");
+    $("u-after").innerHTML=c.after.map(function(a){return '<li><span class="fn">'+esc(a[0])+'</span><span class="st">'+a[1].map(function(k){return '<span class="stamp '+STAMP[k][0]+'">'+STAMP[k][1]+"</span>"}).join("")+"</span></li>"}).join("");
+    var lines=c.diff[cur], s=stats(lines), isRead=c.read.indexOf(cur)>=0;
+    $("u-name").textContent=cur;
+    $("u-kind").innerHTML=isRead?"read, not changed":(s[1]===0&&s[0]===lines.length?"new file, ":"")+count(s);
+    $("u-diff").innerHTML=lines.map(function(l){var g=l.charAt(0); return '<span class="dl'+(g==="+"?" add":g==="-"?" del":"")+'">'+(g==="-"?"−":g)+" "+esc(l.slice(1))+"</span>"}).join("");
+    $("u-note").innerHTML=c.note[cur];
+  }
+  $("u-seg").addEventListener("click",function(e){var b=e.target.closest("button"); if(!b)return; ci=+b.dataset.i; cur=U[ci].first; render();});
+  $("u-files").addEventListener("click",function(e){var b=e.target.closest("button"); if(!b)return; cur=b.dataset.f; render();});
+  render();
+})();
+
+/* ───────── 6. numbers ───────── */
 (function(){
   var OK=["SELECT percentile_cont(0.5) WITHIN GROUP (","         ORDER BY ready_at - dropped_off_at","       ) AS median_turnaround","FROM work_orders","WHERE date_trunc('month', dropped_off_at) = :month"];
   var BAD=["SELECT avg(ready_at - dropped_off_at)","       AS turnaround","FROM work_orders","WHERE date_trunc('month', dropped_off_at) = :month","  AND waiting_on_parts = false"];

@@ -10,15 +10,16 @@ The whole page is one file, `index.html`. Open it in a browser. There is no buil
 2. **A folder an agent can walk.** Index files, links, and reading only what a question needs.
 3. **Who wrote it, who checked it, and is it still true.** The `generated`, `verified`, and `stale_after` lines.
 4. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
-5. **A number that can show its work.** Attested Computations.
-6. **What it leaves out on purpose.** Non-goals, and how to start a bundle.
+5. **Then someone has to keep it current.** `index.md`, `log.md`, `README.md` and `AGENTS.md`, and one change followed through git.
+6. **A number that can show its work.** Attested Computations.
+7. **What it leaves out on purpose.** Non-goals, and how to start a bundle.
 
 ## Changing the example
 
 The bike shop is data, not prose baked into the layout. In the script at the bottom of `index.html`:
 
 - `DIRS` and `C` hold the bundle's folders and its nine pages (titles, descriptions, word counts, links).
-- Each exhibit keeps its own small data block next to its code: `NOTES` (the annotated file), `QS` (the three questions), `P` (who wrote and checked each page), `S` (the four sources), `M` (the monthly numbers).
+- Each exhibit keeps its own small data block next to its code: `NOTES` (the annotated file), `QS` (the three questions), `P` (who wrote and checked each page), `S` (the four sources), `U` (the e-bike change and its two commits), `M` (the monthly numbers).
 
 Swapping the shop for another setting means rewriting those blocks and the sentences around the exhibits.
 
