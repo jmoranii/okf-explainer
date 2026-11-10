@@ -32,4 +32,4 @@ Swapping the shop for another setting means rewriting those blocks and the sente
 - [Open Knowledge Format specification, version 0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md) (read 2026-11-10)
 - [The OKF repository](https://github.com/GoogleCloudPlatform/open-knowledge-format), Apache 2.0 license
 
-Halfway Cycles, its staff, and its numbers are invented. This is an independent explainer and is not affiliated with Google. The page was written by an AI model directed by a person and has not yet been checked line by line against the specification.
+Halfway Cycles, its staff, and its numbers are invented. This is an independent explainer and is not affiliated with Google. The page was written by an AI model directed by a person. A second AI model has reviewed it line by line against the specification; no person has yet.

@@ -66,6 +66,7 @@ h3{font-size:1.2rem;font-weight:650;line-height:1.25}
 .toc a[aria-current]{color:var(--ink);font-weight:600;border-left-color:var(--link)}
 .toc .n{font-variant-numeric:tabular-nums}
 .part{padding-block:3.5rem;border-top:1px solid var(--rule)}
+h2:focus{outline:none}
 .kick{font:500 .74rem var(--mono);color:var(--ink-2);letter-spacing:.04em;margin-bottom:.6rem}
 .cue{font:500 .82rem/1.5 var(--mono);color:var(--ink);max-width:46rem}
 .cue b{font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--link);border:1.5px solid currentColor;border-radius:3px;padding:.1rem .4rem;margin-right:.7em;white-space:nowrap}
@@ -276,7 +277,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
         <div><h3>Plain text, nothing to install</h3><p>Every page is a text file. Any editor opens it today, and any editor will open it in twenty years.</p><a class="jump" href="#one-file">Start with one page</a></div>
         <div><h3>People and models read the same page</h3><p>There is no export step and no second copy to fall behind. An agent loads the file as it is, and so do you.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
         <div><h3>Organized, and findable as it grows</h3><p>Folders, listings and links let a reader reach one page among thousands without opening the rest.</p><a class="jump" href="#layout">What goes in the folder</a><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
-        <div><h3>It keeps up as things change</h3><p>An agent can draft pages and update them. Each page says who wrote it, who checked it and when it expires, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
+        <div><h3>It keeps up as things change</h3><p>An agent can draft pages and update them. Each page can say who wrote it, who checked it and when it expires, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
         <div><h3>Portable, with no lock-in</h3><p>A bundle is a folder. Copy it, zip it, or move it to another tool. No vendor's service stands between you and what you wrote.</p><a class="jump" href="#edges">What it leaves out on purpose</a></div>
         <div><h3>Versioned, so a team stays in step</h3><p>Kept in git, every change is recorded with who made it and why, and everyone works from the same copy.</p><a class="jump" href="#upkeep">Then someone has to keep it current</a></div>
       </div>
@@ -377,12 +378,12 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
             </div>
           </div>
         </div>
-        <p class="cap">Word counts are for this example bundle. The saving grows with the folder: the path stays three or four files long whether the bundle holds eighteen files or eighteen hundred.</p>
+        <p class="cap">Word counts are for this example bundle. Each of these questions takes three or four files. In a larger bundle the path depends on how the folder is organized, but the idea holds: a reader opens a few listings and pages, not everything.</p>
       </div>
       <div class="fig" id="v-map-pane" hidden>
         <div class="crumbs" id="m-info" aria-live="polite"></div>
         <div class="scroll-x"><svg id="map" viewBox="0 0 760 430" role="img" aria-label="The bike shop bundle drawn as a graph of links between its nine pages"></svg></div>
-        <p class="cap">The map shows the nine pages and leaves out the index and log files. Select a page to see what it links to and what links to it. A link to a page that does not exist is allowed. The specification treats it as knowledge nobody has written yet, and a reader must not reject the bundle over it.</p>
+        <p class="cap">The map shows the nine pages and leaves out the index and log files. Select a page to see what it links to and what links to it. A link to a page that does not exist is allowed. It may simply be knowledge nobody has written yet, and a reader must not reject the bundle over it.</p>
       </div>
     </div>
   </div>
@@ -499,7 +500,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <h2>A number that can show its work</h2>
     <div class="prose">
       <p>Definitions are one problem. Numbers are a harder one. Ask an agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
-      <p>OKF's answer is a page type called an Attested Computation. It holds the approved calculation and names the blanks an agent may fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, compares what actually ran against what was approved. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></p>
+      <p>OKF's answer is a page type called an Attested Computation. It holds the approved calculation and names the blanks an agent may fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, checks two things: that what actually ran is the approved calculation with only the blanks filled in, and that the number on screen is the one that run produced. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a> <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#105-how-a-consumer-uses-it-informative">§10.5</a></p>
     </div>
     <div class="fig">
       <p class="cue"><b>Try it</b>The shop's work orders live in a Postgres database. Run the calculation as written, then let the agent improvise.</p>
@@ -527,7 +528,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       </div>
     </div>
     <div class="prose">
-      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> says a person agreed the definition is right. Attestation says this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
+      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> says the definition was checked and found right, by a person or by a process. Attestation says this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
       <p>The format records the calculation and how to check it. It does not run anything itself, and version 0.2 leaves the details of how receipts and verdicts travel to a later revision.</p>
     </div>
   </div>
@@ -579,7 +580,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 3. In the body, say what it is and how it is used. Link to related pages with ordinary markdown links. Do not invent details. Where you are unsure, say so on the page.
 
-4. List where each page's content came from under sources in the header. Every entry needs a resource: a URL, a path, or a plain description of what you read.
+4. List where each page's content came from under sources in the header. Every entry needs a resource: the URL or path of the thing you read. For something too broad to point at, such as all the queries run against a table, state its scope in words.
 
 5. Do not add a verified line. A person does that after reading.
 
@@ -618,6 +619,11 @@ var $=function(id){return document.getElementById(id)};
 var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")};
 var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
+// redraw a list of buttons without dropping keyboard focus: if focus was inside, it moves to the selected button
+var redraw=function(box,html){
+  var had=box.contains(document.activeElement); box.innerHTML=html;
+  if(had){var n=box.querySelector('[aria-pressed="true"]'); if(n)n.focus({preventScroll:true});}
+};
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
 
 /* ───────── section navigation ───────── */
@@ -630,10 +636,6 @@ NAV.forEach(function(n,i){
 (function(){
   var links=$("toc").querySelectorAll("a");
   var mark=function(id){links.forEach(function(a){if(a.dataset.id===id)a.setAttribute("aria-current","true"); else a.removeAttribute("aria-current");})};
-  $("toc").addEventListener("click",function(e){
-    var a=e.target.closest("a"); if(!a)return;
-    e.preventDefault(); $(a.dataset.id).scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});
-  });
   // the current section is the last one whose top has passed a quarter of the way down the window
   var secs=NAV.map(function(n){return $(n[0])});
   var sync=function(){var y=window.innerHeight*.25, cur=null; secs.forEach(function(x){if(x.getBoundingClientRect().top<=y)cur=x.id}); mark(cur);};
@@ -696,12 +698,12 @@ var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
     fence:["The header fence","Three dashes open the header and three close it. Between them is a short list of named facts about the page, written in YAML. Below them is the page itself.","4","#4-concept-documents"],
     type:["type: the only required line","It says what kind of thing the page describes. There is no official list of types. You pick words that explain themselves, and a reader has to cope with ones it has never seen.","4.1","#41-frontmatter"],
     title:["title","A display name for people. If you leave it out, a reader can fall back on the file name.","4.1","#41-frontmatter"],
-    desc:["description","One sentence. Index pages and search results reuse it word for word, so it is worth writing well.","4.1","#41-frontmatter"],
+    desc:["description","One sentence. Index pages are meant to reuse it, and search results and previews can too, so it is worth writing well.","4.1","#41-frontmatter"],
     tags:["tags","Short labels that cut across folders. A reader that wants a page per tag can build one by scanning headers.","3.1","#31-reserved-filenames"],
     generated:["generated: who wrote this","Who or what produced the current text, and when. Agents are written as name/version, people as human:name, and scheduled jobs as process:name.","5.2","#52-trust-generated-and-verified"],
-    verified:["verified: who checked this","Kept apart from generated because the writer and the checker are often different. It can hold several checks. A reader derives the page's trust level from this line alone.","5.2","#52-trust-generated-and-verified"],
-    stale:["stale_after: when to stop trusting it","A plain date. On or after it, the page counts as stale. It is a fixed date and not a countdown, so checking it is one comparison.","5.5","#55-lifecycle-stale_after"],
-    sources:["sources: what it was built from","Each source gets a short id so a sentence in the body can point at it. A source can also carry signals such as who wrote it and how often it is used, and the reader judges credibility from those.","5.1","#51-provenance-sources"],
+    verified:["verified: who checked this","Kept apart from generated because the writer and the checker are often different. It can hold several checks. A reader derives the page's trust level from this line alone.","5.2","#52-trust-generated-and-verified","5.3","#53-trust-tiers"],
+    stale:["stale_after: when to stop trusting it","A date and time written out in full. From that moment on, the page counts as stale. It is a fixed moment and not a countdown, so checking it is one comparison.","5.5","#55-lifecycle-stale_after"],
+    sources:["sources: what it was built from","A source can carry a short id so a sentence in the body can point at it. It can also carry signals such as who wrote it and how often it is used, and the reader judges credibility from those.","5.1","#51-provenance-sources"],
     body:["The body","Ordinary markdown, with no required sections. The specification suggests headings, lists, and tables over long paragraphs, because structure helps both kinds of reader.","4.2","#42-body"],
     link:["A link to another page","A normal markdown link. A path starting with a slash is read from the top of the bundle, which is the recommended form. The sentence around the link says what the relationship is.","6.1","#61-links-between-concepts"],
     foot:["A footnote tied to a source","The footnote's label matches a source id in the header. That pins one claim to one source, and it still works after an agent reorders the list.","5.1","#51-provenance-sources"]
@@ -709,12 +711,12 @@ var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
   var mode="full", sel="type";
   function draw(){
     var L=mode==="full"?FULL:BARE;
-    $("f-lines").innerHTML=L.map(function(l){
+    redraw($("f-lines"),L.map(function(l){
       return l[0]?'<button class="ln" data-k="'+l[0]+'" aria-pressed="'+(l[0]===sel)+'">'+l[1]+'</button>':'<span class="ln blank"> </span>';
-    }).join("");
+    }).join(""));
     $("f-count").textContent=mode==="full"?"":"still a conforming page";
     var n=NOTES[sel];
-    $("f-note").innerHTML='<span class="mono">'+esc(n[0])+'</span>'+esc(n[1])+' <a class="ref" href="'+SPEC+n[3]+'">§'+n[2]+'</a>';
+    $("f-note").innerHTML='<span class="mono">'+esc(n[0])+'</span>'+esc(n[1])+' <a class="ref" href="'+SPEC+n[3]+'">§'+n[2]+'</a>'+(n[4]?' <a class="ref" href="'+SPEC+n[5]+'">§'+n[4]+'</a>':'');
     $("f-full").setAttribute("aria-pressed",String(mode==="full"));
     $("f-bare").setAttribute("aria-pressed",String(mode==="bare"));
   }
@@ -756,10 +758,10 @@ var HOUSE={
   var cur=0;
   $("a-count").textContent=IDS.length+" pages, "+A.length+" housekeeping files";
   function render(){
-    $("a-tree").innerHTML='<li class="grp">Housekeeping</li>'+A.map(function(a,i){
+    redraw($("a-tree"),'<li class="grp">Housekeeping</li>'+A.map(function(a,i){
         return '<li><button class="frow arow" data-i="'+i+'" aria-pressed="'+(i===cur)+'"><span class="fn">'+a.f+'</span><span class="fk">'+a.tag+"</span></button></li>"}).join("")+
       '<li class="grp">The pages</li>'+DIRS.map(function(d){var n=inDir(d[0]).length;
-        return '<li class="adir"><span class="fn">'+d[0]+'/</span><span class="fk">'+n+(n===1?" page":" pages")+"</span></li>"}).join("");
+        return '<li class="adir"><span class="fn">'+d[0]+'/</span><span class="fk">'+n+(n===1?" page":" pages")+"</span></li>"}).join(""));
     var a=A[cur];
     $("a-name").textContent=a.f;
     $("a-whose").innerHTML='<span class="stamp whose'+(a.okf?" in":"")+'">'+(a.okf?"Part of OKF":"Not OKF")+"</span>";
@@ -972,9 +974,23 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   range.value=todayN;
   function state(id,now){
     var p=P[id], m=mine[id]||{}, ver=p.ver.concat(m.ver||[]).filter(function(v){return day(v[1])<=now});
-    var stale=m.stale&&day(m.stale.set)<=now?m.stale.to:p.stale;
+    // expiry edits are dated: the one that counts is the latest made on or before the date shown
+    var moved=null; (m.stale||[]).forEach(function(x){if(day(x.set)<=now&&(!moved||day(x.set)>=day(moved.set)))moved=x;});
+    var stale=moved?moved.to:p.stale;
     var tier=ver.some(function(v){return v[0].indexOf("human:")===0})?"human":(ver.length?"machine":"none");
-    return {born:day(p.gen[1])<=now,ver:ver,stale:stale,isStale:!!stale&&now>=day(stale),tier:tier};
+    return {born:day(p.gen[1])<=now,ver:ver,stale:stale,isStale:!!stale&&now>=day(stale),tier:tier,moved:moved};
+  }
+  // the explanation has to agree with the stamps, so it is written from the same state
+  function why(id,s,now){
+    var p=P[id], yours=s.ver.filter(function(v){return v[0]==="human:you"});
+    if(!yours.length&&!s.moved&&p.ver.every(function(v){return day(v[1])<=now})) return p.why;
+    var t=yours.length?"You signed this page off on "+nice(day(yours[yours.length-1][1]))+", so readers now treat it as human-reviewed."
+      :s.tier==="human"?"On this date a person has checked this page."
+      :s.tier==="machine"?"On this date only a machine has checked this page."
+      :"On this date nobody has checked this page yet.";
+    if(s.moved) t+=" You moved its expiry date to "+nice(day(s.moved.to))+".";
+    if(s.isStale) t+=" It is past its expiry date.";
+    return t;
   }
   var TN={none:"unverified",machine:"machine-confirmed",human:"human-reviewed"};
   function draw(){
@@ -999,7 +1015,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
       y+=s.stale?'<span class="k">stale_after</span>: '+s.stale+'T00:00:00Z'+(s.isStale?'   <span class="c"># passed</span>':''):'<span class="c"># no stale_after line: never expires on its own</span>';
     }
     $("t-yaml").innerHTML=y;
-    $("t-why").textContent=s.born?p.why:"";
+    $("t-why").textContent=s.born?why(sel,s,now):"";
     $("t-sign").disabled=$("t-push").disabled=!s.born;
     $("t-reset").disabled=!Object.keys(mine).length;
   }
@@ -1007,7 +1023,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   $("t-pages").addEventListener("keydown",function(e){var li=e.target.closest("li"); if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault(); sel=li.dataset.id; draw(); var n=$("t-pages").querySelector('[data-id="'+sel+'"]'); if(n)n.focus();}});
   range.addEventListener("input",draw);
   $("t-sign").addEventListener("click",function(){var now=+range.value; (mine[sel]=mine[sel]||{}).ver=(mine[sel].ver||[]).concat([["human:you",iso(now)]]); draw();});
-  $("t-push").addEventListener("click",function(){var now=+range.value; (mine[sel]=mine[sel]||{}).stale={set:iso(now),to:iso(now+183)}; draw();});
+  $("t-push").addEventListener("click",function(){var now=+range.value; ((mine[sel]=mine[sel]||{}).stale=mine[sel].stale||[]).push({set:iso(now),to:iso(now+183)}); draw();});
   $("t-reset").addEventListener("click",function(){mine={}; draw();});
   draw();
 })();
@@ -1113,7 +1129,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
        n[RM]='<span class="mono">README.md &middot; not part of OKF</span>The front door for people. The agent reads it and leaves it alone. It carries a one-line header only because it sits inside the bundle.';
        n[LR]='<span class="mono">a page, changed by the agent</span>The agent added the rate and stamped <code>generated</code> with its own name. It left the owner\'s two lines alone, so the January sign-off now sits above a sentence Mara has not read. OKF allows that. The two lines are independent, and a reader spots the gap by comparing their dates.'+ref("52-trust-generated-and-verified","§5.2");
        n[EB]='<span class="mono">a new page</span>It has no <code>verified</code> line, so every reader treats it as unverified until someone checks it.'+ref("53-trust-tiers","§5.3");
-       n[PI]='<span class="mono">index.md &middot; part of OKF</span>One new line, reusing the new page\'s own description so the listing matches the page. Most agents rebuild this file instead of editing it by hand.'+ref("8-index-files","§8");
+       n[PI]='<span class="mono">index.md &middot; part of OKF</span>One new line, reusing the new page\'s own description so the listing matches the page. The format lets a tool generate this file, and the shop\'s house rules tell the agent to rebuild it.'+ref("8-index-files","§8");
        n[LG]='<span class="mono">log.md &middot; part of OKF</span>A new dated heading at the top, one line per change. The bold first word is a habit, not a rule.'+ref("9-log-files","§9");
        return n;})()},
     {tab:"2. The owner's sign-off", who:"Mara", when:"10 Nov 2026, 17:30", msg:"Sign off the e-bike pages. Rates hold until next September.", first:LR,
@@ -1127,7 +1143,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
        d[EB]=pre(EBHEAD," ").concat(["+verified: { by: human:mara, at: 2026-11-10T17:30:00Z }"],pre(EBBODY," "));
        return d;})(),
      note:(function(){var n={};
-       n[LR]='<span class="mono">a page, signed off by a person</span>Mara read the diff, agreed, and added a second check beside the first. She also moved the expiry date out a year. The page is human-reviewed and current again.'+ref("52-trust-generated-and-verified","§5.2");
+       n[LR]='<span class="mono">a page, signed off by a person</span>Mara read the diff, agreed, and added a second check beside the first. She also moved the expiry date out a year. The page is human-reviewed and current again.'+ref("53-trust-tiers","§5.3")+ref("55-lifecycle-stale_after","§5.5");
        n[EB]='<span class="mono">a page, signed off by a person</span>One line added. The page moves from unverified to human-reviewed.'+ref("53-trust-tiers","§5.3");
        return n;})()}
   ];
@@ -1140,8 +1156,8 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
     $("u-seg").querySelectorAll("button").forEach(function(b,i){b.setAttribute("aria-pressed",String(i===ci))});
     $("u-who").textContent="commit by "+c.who; $("u-when").textContent=c.when; $("u-msg").textContent=c.msg;
     var row=function(f,kind){return '<li><button class="frow" data-f="'+f+'" aria-pressed="'+(f===cur)+'"><span class="fk">'+kind+'</span><span class="fn">'+esc(f)+'</span><span class="fc">'+count(stats(c.diff[f]))+"</span></button></li>"};
-    $("u-files").innerHTML=(c.read.length?'<li class="grp">Read first, not changed</li>'+c.read.map(function(f){return row(f,"read")}).join(""):"")+
-      '<li class="grp">Changed in this commit</li>'+c.changed.map(function(x){return row(x[0],x[1])}).join("");
+    redraw($("u-files"),(c.read.length?'<li class="grp">Read first, not changed</li>'+c.read.map(function(f){return row(f,"read")}).join(""):"")+
+      '<li class="grp">Changed in this commit</li>'+c.changed.map(function(x){return row(x[0],x[1])}).join(""));
     $("u-after").innerHTML=c.after.map(function(a){return '<li><span class="fn">'+esc(a[0])+'</span><span class="st">'+a[1].map(function(k){return '<span class="stamp '+STAMP[k][0]+'">'+STAMP[k][1]+"</span>"}).join("")+"</span></li>"}).join("");
     var lines=c.diff[cur], s=stats(lines), isRead=c.read.indexOf(cur)>=0;
     $("u-name").textContent=cur;
@@ -1160,7 +1176,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   var BAD=["SELECT avg(ready_at - dropped_off_at)","       AS turnaround","FROM work_orders","WHERE date_trunc('month', dropped_off_at) = :month","  AND waiting_on_parts = false"];
   var M={"2026-08":["August","3.0 days","1.6 days"],"2026-09":["September","2.5 days","1.4 days"],"2026-10":["October","2.0 days","1.2 days"]};
   var month="2026-10", way="ok", runs=4810;
-  $("n-file").innerHTML='---\n<span class="k">type</span>: Attested Computation\n<span class="k">title</span>: Median turnaround for a month\n<span class="k">runtime</span>: postgres\n<span class="k">parameters</span>:\n  - { name: month, type: date, required: true }\n<span class="k">executor</span>:\n  resource: /references/run-on-postgres.md\n  receipt: [run_id, executed_sql, result]\n<span class="k">attester</span>:\n  resource: /references/sql-equality.py\n<span class="k">verified</span>: { by: human:mara, at: 2026-03-02T16:30:00Z }\n---\n\n# Computation\n\n'+OK.map(function(l){return "    "+esc(l).replace(":month",'<span class="k">:month</span>')}).join("\n");
+  $("n-file").innerHTML='---\n<span class="k">type</span>: Attested Computation\n<span class="k">title</span>: Median turnaround for a month\n<span class="k">runtime</span>: postgres\n<span class="k">parameters</span>:\n  - { name: month, type: date, required: true }\n<span class="k">executor</span>:\n  resource: /references/run-on-postgres.md\n  receipt: [run_id, executed_sql, result]\n<span class="k">attester</span>:\n  resource: /references/check-run.py\n<span class="k">verified</span>: { by: human:mara, at: 2026-03-02T16:30:00Z }\n---\n\n# Computation\n\n```sql\n'+OK.map(function(l){return esc(l).replace(":month",'<span class="k">:month</span>')}).join("\n")+'\n```';
   $("n-months").innerHTML=Object.keys(M).map(function(m){return '<button class="btn" data-m="'+m+'" aria-pressed="false">'+M[m][0]+'</button>'}).join("");
   var bind=function(lines){return lines.map(function(l){return l.replace(":month","'"+month+"-01'")})};
   function draw(){
@@ -1169,7 +1185,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
     $("n-run").textContent="run_id "+runs;
     $("n-sql").innerHTML=ran.map(function(l){return '<span class="sql'+(approved.indexOf(l)<0?" diff":"")+'">'+esc(l)+'</span>'}).join("");
     $("n-verdict").innerHTML=pass
-      ?'<span class="stamp t-human">attested</span><span>What ran matches the approved computation with month filled in.</span>'
+      ?'<span class="stamp t-human">attested</span><span>What ran is the approved computation with month filled in, and the number shown is that run\'s own result.</span>'
       :'<span class="stamp t-stale">failed</span><span>Three lines differ from the approved computation. The agent averaged instead of taking the median, and dropped jobs that waited on parts.</span>';
     $("n-shown").innerHTML='<div class="lab">What the reader is shown</div>'+(pass
       ?'<div class="val">'+M[month][1]+'</div><p>Median turnaround for '+M[month][0]+' 2026, with a link to the run.</p>'
@@ -1181,12 +1197,21 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   draw();
 })();
 
-/* ───────── jumps from the opening section ───────── */
-document.querySelectorAll("a.jump").forEach(function(a){
-  a.addEventListener("click",function(e){
-    var t=$(a.getAttribute("href").slice(1)); if(!t)return;
-    e.preventDefault(); t.scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});
-  });
+/* ───────── in-page links: scroll, move keyboard focus to the section, and keep Back working ───────── */
+var goTo=function(id,push){
+  var t=$(id); if(!t)return;
+  t.scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});
+  var h=t.querySelector("h2")||t; h.setAttribute("tabindex","-1"); h.focus({preventScroll:true});
+  if(push){try{history.pushState(null,"","#"+id)}catch(e){}}
+};
+document.addEventListener("click",function(e){
+  var a=e.target.closest?e.target.closest("a.jump,#toc a"):null;
+  if(!a||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return; // leave open-in-new-tab clicks alone
+  e.preventDefault(); goTo(a.getAttribute("href").slice(1),true);
+});
+window.addEventListener("popstate",function(){
+  var id=location.hash.slice(1);
+  if(id&&$(id)) $(id).scrollIntoView({block:"start"}); else if(!id) window.scrollTo(0,0);
 });
 
 /* ───────── copy ───────── */
