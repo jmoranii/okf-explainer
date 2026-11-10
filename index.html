@@ -190,6 +190,10 @@ input[type=range]{width:100%;accent-color:var(--link);margin:0}
 .u-after li{display:flex;flex-wrap:wrap;gap:.3rem .6rem;align-items:center;font:400 .76rem var(--mono)}
 .u-after .st{display:inline-flex;flex-wrap:wrap;gap:.3rem}
 .t-ink{color:var(--ink)}
+.arow{grid-template-columns:minmax(0,1fr) auto}
+.adir{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.5rem;padding:.32rem .4rem;font:400 .78rem/1.4 var(--mono);color:var(--ink-2)}
+.adir .fk{font-size:.7rem}
+.file-tab .whose{margin-left:0;vertical-align:0}
 .dl{display:block;white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.7em;padding:0 .9rem 0 calc(.9rem + 2ch);text-indent:-2ch}
 .dl.add{background:color-mix(in srgb,var(--human) 15%,var(--sheet))}
 .dl.del{background:color-mix(in srgb,var(--stale) 15%,var(--sheet))}
@@ -243,7 +247,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <p class="mono c" style="font-size:.82rem;letter-spacing:.04em">THE OPEN KNOWLEDGE FORMAT, EXPLAINED WITH A BIKE SHOP</p>
     <h1>A folder that knows what it knows</h1>
     <p class="lede">The Open Knowledge Format (OKF) is a small open standard for writing down what an organization knows, so that people and AI agents can both read it. It is a folder of plain text files, each with a short header. Version 0.2 adds the part that matters once agents start writing those files: who wrote each page, who checked it, and whether it is still true.</p>
-    <p class="cat"><span class="prompt">$</span> <b>cat metrics/turnaround-time.md</b><br>The specification's own summary is &ldquo;If you can <code>cat</code> a file, you can read OKF.&rdquo; (<code>cat</code> is the command that prints a file to the screen.) This page walks through the format with a made-up bike shop, Halfway Cycles, and nothing that depends on one vendor's tools.</p>
+    <p class="cat">This page walks through the format with a made-up bike shop, Halfway Cycles, and nothing that depends on one vendor's tools.</p>
   </div>
 </header>
 
@@ -259,7 +263,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       <div class="cols three">
         <div><h3>Plain text, nothing to install</h3><p>Every page is a text file. Any editor opens it today, and any editor will open it in twenty years.</p><a class="jump" href="#one-file">Start with one page</a></div>
         <div><h3>People and models read the same page</h3><p>There is no export step and no second copy to fall behind. An agent loads the file as it is, and so do you.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
-        <div><h3>Organized, and findable as it grows</h3><p>Folders, listings and links let a reader reach one page among thousands without opening the rest.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
+        <div><h3>Organized, and findable as it grows</h3><p>Folders, listings and links let a reader reach one page among thousands without opening the rest.</p><a class="jump" href="#layout">What goes in the folder</a><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
         <div><h3>It keeps up as things change</h3><p>An agent can draft pages and update them. Each page says who wrote it, who checked it and when it expires, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
         <div><h3>Portable, with no lock-in</h3><p>A bundle is a folder. Copy it, zip it, or move it to another tool. No vendor's service stands between you and what you wrote.</p><a class="jump" href="#edges">What it leaves out on purpose</a></div>
         <div><h3>Versioned, so a team stays in step</h3><p>Kept in git, every change is recorded with who made it and why, and everyone works from the same copy.</p><a class="jump" href="#upkeep">Then someone has to keep it current</a></div>
@@ -297,13 +301,40 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   </div>
 </section>
 
+<!-- ───────────── 1b. what goes in the folder ───────────── -->
+<section class="part" id="layout" data-part="layout">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>What goes in the folder</h2>
+    <div class="prose">
+      <p>The whole folder is called a bundle. You can organize it however suits the subject. The shop sorts its pages into tables, metrics, computations, playbooks and policies, and OKF has no opinion about those names or how deep they go. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p>Around the pages sit four small files that do the housekeeping. Two are OKF's own: it reserves their names, and both are optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> Two are older habits that sit comfortably beside it. Open each one.</p>
+    </div>
+    <div class="fig">
+      <div class="two u-two">
+        <div class="file">
+          <div class="file-tab"><span>halfway-cycles/</span><span id="a-count"></span></div>
+          <ul class="flist" id="a-tree"></ul>
+        </div>
+        <div class="fig">
+          <div class="file">
+            <div class="file-tab"><span id="a-name"></span><span id="a-whose"></span></div>
+            <pre class="file-body" id="a-body"></pre>
+          </div>
+          <div class="note" id="a-note" aria-live="polite"></div>
+        </div>
+      </div>
+      <p class="cap">OKF treats every other <code>.md</code> file inside a bundle as a page. A README or AGENTS file kept inside one needs the same one-line <code>type</code> header as any page. The alternative is to keep both one folder above the bundle. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a></p>
+    </div>
+  </div>
+</section>
+
 <!-- ───────────── 2. the folder ───────────── -->
 <section class="part" id="the-folder" data-part="the-folder">
   <div class="rail"></div>
   <div class="body">
     <h2>A folder an agent can walk</h2>
     <div class="prose">
-      <p>The whole folder is called a bundle. You can organize it however suits the subject. Two file names are reserved, and both are optional. <code>index.md</code> lists what is in a folder, one line per item. <code>log.md</code> records what changed, newest first. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
       <p>The index is what keeps an agent from reading everything. It reads the top listing, picks a folder, reads that folder's listing, and opens the one page it needs.</p>
       <p>Folders say where a page lives. Links say what it has to do with other pages. A link is an ordinary markdown link, and the sentence around it says what the relationship is: this metric is computed from that table, this playbook follows that policy. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#61-links-between-concepts">§6.1</a> An agent uses both. The listings get it to the right page, and a link in that page takes it to the next one.</p>
       <p>Pick a question and watch the path it takes. Then switch to the map to see the same pages arranged by what they link to.</p>
@@ -335,7 +366,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
             </div>
           </div>
         </div>
-        <p class="cap">Word counts are for this example bundle. The saving grows with the folder: the path stays three or four files long whether the bundle holds sixteen files or sixteen hundred.</p>
+        <p class="cap">Word counts are for this example bundle. The saving grows with the folder: the path stays three or four files long whether the bundle holds eighteen files or eighteen hundred.</p>
       </div>
       <div class="fig" id="v-map-pane" hidden>
         <div class="crumbs" id="m-info" aria-live="polite"></div>
@@ -425,19 +456,9 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       <p>A first draft is the easy part. Shops change their prices, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects this. It describes knowledge that agents keep writing and rewriting, not something authored once and left alone. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
       <p>Plain text is what makes that workable. A person and a model read the same file, so the model can do the bookkeeping and the person only has to read what changed. Keep the folder in git, on GitHub or anywhere else, and every change arrives as a diff: which lines went, which came in, who made the change, and when. The specification recommends git for exactly that and does not require it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
       <p>Git is also what keeps a team in step. Everyone, and every agent, works on a copy and sends changes back to a shared one. Two people's edits are merged, and where they collide git says so instead of quietly keeping one. A host such as GitHub adds a place to review a change before it lands. None of this is OKF's own machinery, and the specification never names a host. It comes free with being plain text.</p>
-      <p>Four files around the pages do most of the housekeeping. Two belong to OKF. Two are older habits that sit comfortably beside it.</p>
-    </div>
-    <div class="fig" style="margin-top:1.6rem">
-      <div class="cols">
-        <div><h3><code>index.md</code><span class="stamp whose in">Part of OKF</span></h3><p>For anyone looking for a page. One line per page in its folder, so a reader can choose without opening everything. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#8-index-files">§8</a></p></div>
-        <div><h3><code>log.md</code><span class="stamp whose in">Part of OKF</span></h3><p>For anyone asking what changed. Dated entries, newest first. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#9-log-files">§9</a></p></div>
-        <div><h3><code>README.md</code><span class="stamp whose">Not OKF</span></h3><p>For a person arriving cold. What the folder is and how to use it. A habit from sharing code that is far older than OKF.</p></div>
-        <div><h3><code>AGENTS.md</code><span class="stamp whose">Not OKF</span></h3><p>For the agent that maintains the folder. The house rules: what to update, and what to leave to a person. An open convention borrowed from coding tools. <a class="ref" href="https://agents.md/">agents.md</a></p></div>
-      </div>
-      <p class="cap">OKF treats every other <code>.md</code> file inside a bundle as a page. A README or AGENTS file kept inside one needs the same one-line <code>type</code> header as any page. The alternative is to keep both one folder above the bundle. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a></p>
     </div>
     <div class="prose" style="margin-top:2.2rem">
-      <p>Here is one change, followed all the way through. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words. Select a file to see what happened to it.</p>
+      <p>Here is one change, followed all the way through, with the four housekeeping files doing their jobs. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words. Select a file to see what happened to it.</p>
     </div>
     <div class="fig">
       <p class="ask"><span class="c">Mara, to the agent</span>&ldquo;We take e-bikes from this week. $110 an hour. Write up how we handle them.&rdquo;</p>
@@ -584,16 +605,17 @@ var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").
 var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
-var WRITTEN="2026-11-10T18:01:00Z";
+var WRITTEN="2026-11-10T18:15:00Z";
 
 /* ───────── the essay as a bundle: section headers ───────── */
 var PARTS={
   "why":{title:"Why write it down this way",desc:"What a folder of plain text pages gets you, and where this page shows each point.",src:["1","README"]},
   "one-file":{title:"Start with one page",desc:"What a single OKF concept looks like, line by line.",src:["4","5","11"]},
-  "the-folder":{title:"A folder an agent can walk",desc:"Bundles, index files, links between pages, and reading only what a question needs.",src:["3","6","8","9"]},
+  "layout":{title:"What goes in the folder",desc:"Pages, plus four housekeeping files: index, log, README and AGENTS.",src:["3","8","9","11"]},
+  "the-folder":{title:"A folder an agent can walk",desc:"Index files, links between pages, and reading only what a question needs.",src:["6","8"]},
   "trust":{title:"Who wrote it, who checked it, and is it still true",desc:"The generated, verified, and stale_after lines, and the trust levels readers derive.",src:["5","7"]},
   "first-draft":{title:"Letting an agent write the first draft",desc:"The explore-and-draft pattern from the sample agent, generalized beyond one database.",src:["README","base.py"]},
-  "upkeep":{title:"Then someone has to keep it current",desc:"Index and log files, README and AGENTS files, and one change followed through git.",src:["1","3","5","8","9","11"]},
+  "upkeep":{title:"Then someone has to keep it current",desc:"One change followed through git: the agent's commit, then the owner's sign-off.",src:["1","3","5"]},
   "numbers":{title:"A number that can show its work",desc:"Attested Computations: approved calculations and a mechanical check that they ran.",src:["10"]},
   "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start one with an agent.",src:["1","11"]}
 };
@@ -693,13 +715,61 @@ var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
   draw();
 })();
 
+/* ───────── 1b. what goes in the folder ───────── */
+var HOUSE={
+  README:["---","type: Readme","title: Halfway Cycles, written down","---","","This folder is what the shop knows: its tables, its numbers,","its playbooks and its rules. Every page is a plain text file.","",
+    "- Looking for something? Start at index.md.","- Wondering what changed? Read log.md.","- Want to change something? Edit the page, or ask the shop agent.","- Mara signs off anything under policies/."],
+  AGENTS:["---","type: Agent Instructions","title: How to maintain this bundle","---","","Read this before you change anything.","",
+    "- Stamp every page you write or change with a `generated` line:","  your name and the time.",
+    "- Leave `verified` and `stale_after` alone. A person sets those","  after reading your change.",
+    "- Rebuild the index.md of any folder you touched.",
+    "- Add a dated line to log.md for every change, newest date first.",
+    "- One request, one commit. Say what changed and why.",
+    "- Never delete a page. Set `status: deprecated` and ask Mara."],
+  LOG:["# Halfway Cycles update log","",
+    "## 2026-03-10","* **Update**: Dev checked the [spring tune-up](/playbooks/spring-tune-up.md) checklist.","",
+    "## 2026-02-10","* **Creation**: First draft of the tables and metrics, written from the shop database.","",
+    "## 2026-01-15","* **Initialization**: Mara wrote [labor rates](/policies/labor-rates.md), the first page."],
+  INDEX:["# Halfway Cycles"].concat(DIRS.map(function(d){return "* ["+d[0]+"]("+d[0]+"/) - "+d[1]}))
+};
+(function(){
+  var ref=function(h,t){return ' <a class="ref" href="'+SPEC+"#"+h+'">'+t+"</a>"};
+  var A=[
+    {f:"index.md",tag:"what is here",okf:true,body:HOUSE.INDEX,
+     note:'<span class="mono">for anyone looking for a page</span>One line per item, so a reader can choose without opening everything. Any folder can have its own, and each of the shop\'s five does.'+ref("8-index-files","§8")},
+    {f:"log.md",tag:"what changed",okf:true,body:HOUSE.LOG,
+     note:'<span class="mono">for anyone asking what changed</span>Dated headings, newest first, one line per change.'+ref("9-log-files","§9")},
+    {f:"README.md",tag:"for people",okf:false,body:HOUSE.README,
+     note:'<span class="mono">for a person arriving cold</span>What the folder is and how to use it. A habit from sharing code that is far older than OKF.'},
+    {f:"AGENTS.md",tag:"for the agent",okf:false,body:HOUSE.AGENTS,
+     note:'<span class="mono">for the agent that maintains the folder</span>The house rules: what to update, and what to leave to a person. An open convention borrowed from coding tools. <a class="ref" href="https://agents.md/">agents.md</a>'}
+  ];
+  var cur=0;
+  $("a-count").textContent=IDS.length+" pages, "+A.length+" housekeeping files";
+  function render(){
+    $("a-tree").innerHTML='<li class="grp">Housekeeping</li>'+A.map(function(a,i){
+        return '<li><button class="frow arow" data-i="'+i+'" aria-pressed="'+(i===cur)+'"><span class="fn">'+a.f+'</span><span class="fk">'+a.tag+"</span></button></li>"}).join("")+
+      '<li class="grp">The pages</li>'+DIRS.map(function(d){var n=inDir(d[0]).length;
+        return '<li class="adir"><span class="fn">'+d[0]+'/</span><span class="fk">'+n+(n===1?" page":" pages")+"</span></li>"}).join("");
+    var a=A[cur];
+    $("a-name").textContent=a.f;
+    $("a-whose").innerHTML='<span class="stamp whose'+(a.okf?" in":"")+'">'+(a.okf?"Part of OKF":"Not OKF")+"</span>";
+    $("a-body").textContent=a.body.join("\n");
+    $("a-note").innerHTML=a.note;
+  }
+  $("a-tree").addEventListener("click",function(e){var b=e.target.closest("button"); if(!b)return; cur=+b.dataset.i; render();});
+  render();
+})();
+
 /* ───────── 2. the folder ───────── */
 var MAP={}; // the link map registers trail() and play() here; the folder walk drives both views
 (function(){
   var FILES={}; // path -> {words, kind}
   var rootIdx="# Halfway Cycles\n"+DIRS.map(function(d){return "* ["+d[0]+"]("+d[0]+"/) - "+d[1]}).join("\n");
   FILES["index.md"]={words:wc(rootIdx)};
-  FILES["log.md"]={words:120};
+  FILES["log.md"]={words:wc(HOUSE.LOG.join(" "))};
+  FILES["README.md"]={words:wc(HOUSE.README.join(" "))};
+  FILES["AGENTS.md"]={words:wc(HOUSE.AGENTS.join(" "))};
   DIRS.forEach(function(d){
     var txt="# "+d[0]+"\n"+inDir(d[0]).map(function(id){return "* ["+C[id].title+"]("+base(id)+".md) - "+C[id].desc}).join("\n");
     FILES[d[0]+"/index.md"]={words:wc(txt)};
@@ -713,7 +783,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
     {q:"Where do we keep what parts cost us?",path:["index.md","tables/index.md","tables/parts.md"],end:"Found the parts table and its cost column."}
   ];
   var tree=$("q-tree");
-  var rows=[["index.md","index.md",0],["log.md","log.md",0]];
+  var rows=[["index.md","index.md",0],["log.md","log.md",0],["README.md","README.md",0],["AGENTS.md","AGENTS.md",0]];
   DIRS.forEach(function(d){
     rows.push([null,d[0]+"/",0]);
     rows.push([d[0]+"/index.md","index.md",1]);
@@ -1007,15 +1077,8 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
   var ref=function(h,t){return ' <a class="ref" href="'+SPEC+"#"+h+'">'+t+"</a>"};
   var STAMP={human:["t-human","human-reviewed"],none:["t-none","unverified"],stale:["t-stale","stale"],edited:["t-ink","edited since its check"]};
   // each diff line starts with "+", "-" or a space, the way git prints one
-  var README=[" ---"," type: Readme"," title: Halfway Cycles, written down"," ---"," "," This folder is what the shop knows: its tables, its numbers,"," its playbooks and its rules. Every page is a plain text file."," ",
-    " - Looking for something? Start at index.md."," - Wondering what changed? Read log.md."," - Want to change something? Edit the page, or ask the shop agent."," - Mara signs off anything under policies/."];
-  var AGENTS=[" ---"," type: Agent Instructions"," title: How to maintain this bundle"," ---"," "," Read this before you change anything."," ",
-    " - Stamp every page you write or change with a `generated` line:","   your name and the time.",
-    " - Leave `verified` and `stale_after` alone. A person sets those","   after reading your change.",
-    " - Rebuild the index.md of any folder you touched.",
-    " - Add a dated line to log.md for every change, newest date first.",
-    " - One request, one commit. Say what changed and why.",
-    " - Never delete a page. Set `status: deprecated` and ask Mara."];
+  var sp=function(l){return " "+l};
+  var README=HOUSE.README.map(sp), AGENTS=HOUSE.AGENTS.map(sp);
   var EBHEAD=["---","type: Playbook","title: E-bike service","description: How the shop handles bikes with motors and batteries.","generated: { by: shop-agent/1.0, at: 2026-11-10T15:04:00Z }"];
   var EBBODY=["---","","1. Check the battery for swelling or damage before the bike comes inside.","2. Log the job in [work orders](/tables/work_orders.md) with the motor brand.","3. Bill at the e-bike rate in [labor rates](/policies/labor-rates.md)."];
   var pre=function(a,s){return a.map(function(l){return s+l})};
@@ -1034,10 +1097,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
        d[EB]=pre(EBHEAD.concat(EBBODY),"+");
        d[PI]=[" # playbooks"," * [Spring tune-up](spring-tune-up.md) - "+C["playbooks/spring-tune-up"].desc," * [Warranty claim](warranty-claim.md) - "+C["playbooks/warranty-claim"].desc,
          "+* [E-bike service](e-bike-service.md) - How the shop handles bikes with motors and batteries."];
-       d[LG]=[" # Halfway Cycles update log"," ","+## 2026-11-10","+* **Creation**: Added the [e-bike service playbook](/playbooks/e-bike-service.md).","+* **Update**: Added the e-bike rate to [labor rates](/policies/labor-rates.md).","+",
-         " ## 2026-03-10"," * **Update**: Dev checked the [spring tune-up](/playbooks/spring-tune-up.md) checklist."," ",
-         " ## 2026-02-10"," * **Creation**: First draft of the tables and metrics, written from the shop database."," ",
-         " ## 2026-01-15"," * **Initialization**: Mara wrote [labor rates](/policies/labor-rates.md), the first page."];
+       d[LG]=[" # Halfway Cycles update log"," ","+## 2026-11-10","+* **Creation**: Added the [e-bike service playbook](/playbooks/e-bike-service.md).","+* **Update**: Added the e-bike rate to [labor rates](/policies/labor-rates.md).","+"].concat(HOUSE.LOG.slice(2).map(sp));
        return d;})(),
      note:(function(){var n={};
        n[AM]='<span class="mono">AGENTS.md &middot; not part of OKF</span>The house rules, and the first thing the agent reads. Everything in this file is the shop\'s own choice. OKF says nothing about who may write which line.';
