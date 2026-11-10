@@ -454,6 +454,50 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   </div>
 </section>
 
+<!-- ───────────── 6. numbers ───────────── -->
+<section class="part" id="numbers" data-part="numbers">
+  <div class="body">
+    <h2>A number that can show its work</h2>
+    <div class="prose">
+      <p>Getting trustworthy numbers can be a real issue. Ask an AI agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
+      <p>OKF's solution is a page type called an Attested Computation. It holds the approved formula for calculating a number, along with the blanks that an AI agent is allowed to fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, checks two things:</p>
+      <ol>
+        <li>That what actually ran is the approved calculation with only the blanks filled in. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></li>
+        <li>That the number on screen is the one that run produced. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#105-how-a-consumer-uses-it-informative">§10.5</a></li>
+      </ol>
+    </div>
+    <div class="fig">
+      <p class="cue"><b>Try it</b>The shop's work orders live in a Postgres database. Run the calculation as written, then let the agent improvise.</p>
+      <div class="two">
+        <div class="file">
+          <div class="file-tab"><span>computations/turnaround-median.md</span><span class="stamp t-human">human-reviewed</span></div>
+          <pre class="file-body" id="n-file"></pre>
+        </div>
+        <div class="fig">
+          <div class="row">
+            <span class="cap">month =</span>
+            <div class="seg" role="group" aria-label="Month" id="n-months"></div>
+          </div>
+          <div class="row">
+            <button class="btn primary" id="n-ok">Run it as written</button>
+            <button class="btn" id="n-bad">Let the agent improvise</button>
+          </div>
+          <div class="file" aria-live="polite">
+            <div class="file-tab"><span>receipt: what actually ran</span><span id="n-run"></span></div>
+            <div class="file-body" id="n-sql"></div>
+            <div class="verdict" id="n-verdict"></div>
+            <div class="shown" id="n-shown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> confirms that the definition was checked, by a person or by a process. Attestation confirms that this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
+      <p>The format records the calculation and how to check it. It does not run anything itself, and version 0.2 leaves the details of how receipts and verdicts travel to a later revision.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ───────────── 4. building ───────────── -->
 <section class="part" id="first-draft" data-part="first-draft">
   <div class="body">
@@ -526,50 +570,6 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <div class="prose">
       <p>Notice what the agent left alone: the sign-off and the expiry date. Nothing in OKF stops an agent from rewriting them. The format has space to capture who wrote a page and who checked it, and lets you decide who is allowed to edit those fields. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#52-trust-generated-and-verified">§5.2</a> That is why the rule sits in the shop's AGENTS file and not in the OKF specification.</p>
       <p>The review cost Mara one screen. She read two short diffs, not the whole folder, and her approval is a commit like any other: dated, attributed, and easy to undo.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────── 6. numbers ───────────── -->
-<section class="part" id="numbers" data-part="numbers">
-  <div class="body">
-    <h2>A number that can show its work</h2>
-    <div class="prose">
-      <p>Getting trustworthy numbers can be a real issue. Ask an AI agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
-      <p>OKF's solution is a page type called an Attested Computation. It holds the approved formula for calculating a number, along with the blanks that an AI agent is allowed to fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, checks two things:</p>
-      <ol>
-        <li>That what actually ran is the approved calculation with only the blanks filled in. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></li>
-        <li>That the number on screen is the one that run produced. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#105-how-a-consumer-uses-it-informative">§10.5</a></li>
-      </ol>
-    </div>
-    <div class="fig">
-      <p class="cue"><b>Try it</b>The shop's work orders live in a Postgres database. Run the calculation as written, then let the agent improvise.</p>
-      <div class="two">
-        <div class="file">
-          <div class="file-tab"><span>computations/turnaround-median.md</span><span class="stamp t-human">human-reviewed</span></div>
-          <pre class="file-body" id="n-file"></pre>
-        </div>
-        <div class="fig">
-          <div class="row">
-            <span class="cap">month =</span>
-            <div class="seg" role="group" aria-label="Month" id="n-months"></div>
-          </div>
-          <div class="row">
-            <button class="btn primary" id="n-ok">Run it as written</button>
-            <button class="btn" id="n-bad">Let the agent improvise</button>
-          </div>
-          <div class="file" aria-live="polite">
-            <div class="file-tab"><span>receipt: what actually ran</span><span id="n-run"></span></div>
-            <div class="file-body" id="n-sql"></div>
-            <div class="verdict" id="n-verdict"></div>
-            <div class="shown" id="n-shown"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="prose">
-      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> confirms that the definition was checked, by a person or by a process. Attestation confirms that this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
-      <p>The format records the calculation and how to check it. It does not run anything itself, and version 0.2 leaves the details of how receipts and verdicts travel to a later revision.</p>
     </div>
   </div>
 </section>
@@ -667,7 +667,7 @@ var redraw=function(box,html){
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
 
 /* ───────── section navigation ───────── */
-var NAV=[["why","Why"],["one-file","One page"],["layout","In the folder"],["the-folder","Navigating it"],["trust","Trust"],["first-draft","First draft"],["upkeep","Upkeep"],["numbers","Numbers"],["edges","Left out on purpose"],["start","Start one"]];
+var NAV=[["why","Why"],["one-file","One page"],["layout","In the folder"],["the-folder","Navigating it"],["trust","Trust"],["numbers","Numbers"],["first-draft","First draft"],["upkeep","Upkeep"],["edges","Left out on purpose"],["start","Start one"]];
 $("toc").innerHTML=NAV.map(function(n,i){return '<li><a href="#'+n[0]+'" data-id="'+n[0]+'"><span class="n">'+(i+1)+"</span><span>"+n[1]+"</span></a></li>"}).join("");
 NAV.forEach(function(n,i){
   var h=$(n[0]).querySelector("h2"), k=document.createElement("p");

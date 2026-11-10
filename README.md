@@ -11,9 +11,9 @@ The whole page is one file, `index.html`. Open it in a browser. There is no buil
 3. **What goes in the folder.** Pages, plus four housekeeping files: `index.md`, `log.md`, `README.md` and `AGENTS.md`.
 4. **A folder an agent can navigate.** Index files, links, and reading only what a question needs.
 5. **Who wrote it, who checked it, and is it still true.** The `generated`, `verified`, and `stale_after` lines.
-6. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
-7. **Then someone has to keep it current.** One change followed through git: the agent's commit, then the owner's sign-off.
-8. **A number that can show its work.** Attested Computations.
+6. **A number that can show its work.** Attested Computations.
+7. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
+8. **Then someone has to keep it current.** One change followed through git: the agent's commit, then the owner's sign-off.
 9. **What OKF leaves out on purpose.** Non-goals, and the house rules teams add on top.
 10. **Point an agent at what you have.** A copyable brief for drafting a bundle from your own source.
 
