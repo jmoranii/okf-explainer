@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="The Open Knowledge Format, explained with a made-up bike shop and nothing that depends on one vendor's tools.">
+<meta name="description" content="The Open Knowledge Format, explained with a made-up bike shop.">
 <title>A Folder That Knows What It Knows</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
 <style>
@@ -40,6 +40,14 @@ code,.mono{font-family:var(--mono);font-size:.86em}
 p{margin:0}
 .prose{max-width:39rem;display:flex;flex-direction:column;gap:1.05rem}
 .prose + .fig, .fig + .prose{margin-top:1.9rem}
+.prose ul,.prose ol{margin:0;padding-left:1.4rem;display:flex;flex-direction:column;gap:.4rem}
+.tbl{border-collapse:collapse;width:100%;font-size:1rem;line-height:1.45}
+.tbl th{font:600 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);text-align:left;padding:.35rem .9rem .4rem 0;border-bottom:1px solid var(--rule)}
+.tbl td{padding:.5rem .9rem .5rem 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl td:first-child{font:500 .82rem/1.75 var(--mono);white-space:nowrap}
+.tbl td:nth-child(2){white-space:nowrap}
+.tbl th:last-child,.tbl td:last-child{padding-right:0}
+.tbl .whose{margin-left:0;vertical-align:0;font-size:.6rem}
 h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.015em}
 h1{font-size:clamp(2.6rem,7.2vw,5.4rem);line-height:.98;font-weight:750;letter-spacing:-.035em;max-width:14ch}
 h2{font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.08;font-weight:700}
@@ -256,8 +264,8 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="hero-main">
     <p class="mono c" style="font-size:.82rem;letter-spacing:.04em">THE OPEN KNOWLEDGE FORMAT, EXPLAINED WITH A BIKE SHOP</p>
     <h1>A folder that knows what it knows</h1>
-    <p class="lede">The Open Knowledge Format (OKF) is a small open standard for writing down what an organization knows, so that people and AI agents can both read it. It is a folder of plain text files, each with a short header. Version 0.2 adds the part that matters once agents start writing those files: who wrote each page, who checked it, and whether it is still true.</p>
-    <p class="cat">This page walks through the format with a made-up bike shop, Halfway Cycles, and nothing that depends on one vendor's tools.</p>
+    <p class="lede">The Open Knowledge Format (OKF) is a minimalist open standard for capturing what an organization knows, so that people and AI agents can both read it. The system is just a folder of plain text files, each with a short header that can say who wrote the page, who checked it, and when.</p>
+    <p class="cat">This resource walks through the format using the example of a made-up bike shop, Halfway Cycles.</p>
   </div>
 </header>
 
@@ -270,16 +278,16 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Why write it down this way</h2>
     <div class="prose">
-      <p>Most of what an organization knows lives in people's heads, in a wiki nobody trusts, or inside a tool that only that tool can read. OKF's bet is that a folder of plain text pages does the job better. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a> Here are six reasons, each with the part of this page that shows it.</p>
+      <p>Most of what an organization knows lives in people's heads, in a wiki nobody trusts, or inside a tool that only that tool can read. OKF's bet is that a folder of plain text pages does the job better. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a> Here are six reasons why, with links to more details.</p>
     </div>
     <div class="fig" style="margin-top:1.6rem">
       <div class="cols three">
-        <div><h3>Plain text, nothing to install</h3><p>Every page is a text file. Any editor opens it today, and any editor will open it in twenty years.</p><a class="jump" href="#one-file">Start with one page</a></div>
-        <div><h3>People and models read the same page</h3><p>There is no export step and no second copy to fall behind. An agent loads the file as it is, and so do you.</p><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
-        <div><h3>Organized, and findable as it grows</h3><p>Folders, listings and links let a reader reach one page among thousands without opening the rest.</p><a class="jump" href="#layout">What goes in the folder</a><a class="jump" href="#the-folder">A folder an agent can walk</a></div>
-        <div><h3>It keeps up as things change</h3><p>An agent can draft pages and update them. Each page can say who wrote it, who checked it and when it expires, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
-        <div><h3>Portable, with no lock-in</h3><p>A bundle is a folder. Copy it, zip it, or move it to another tool. No vendor's service stands between you and what you wrote.</p><a class="jump" href="#edges">What it leaves out on purpose</a></div>
-        <div><h3>Versioned, so a team stays in step</h3><p>Kept in git, every change is recorded with who made it and why, and everyone works from the same copy.</p><a class="jump" href="#upkeep">Then someone has to keep it current</a></div>
+        <div><h3>Plain text, nothing to install</h3><p>Every page is a simple text file. Any editor opens it today, and any editor will open it in twenty years.</p><a class="jump" href="#one-file">Start with one page</a></div>
+        <div><h3>People and models read the same page</h3><p>An AI agent loads the file as it is, and so do you.</p><a class="jump" href="#the-folder">A folder an agent can navigate</a></div>
+        <div><h3>Organized and findable as it grows</h3><p>Related files, folders, and lists are linked to make it easy to find the data you need.</p><a class="jump" href="#layout">What goes in the folder</a><a class="jump" href="#the-folder">A folder an agent can navigate</a></div>
+        <div><h3>Pages are attributed and timestamped</h3><p>Each page can say who wrote it, who checked it, and when, so a reader knows how far to trust it.</p><a class="jump" href="#trust">Who wrote it, who checked it</a><a class="jump" href="#first-draft">Letting an agent write the first draft</a></div>
+        <div><h3>Portable and flexible</h3><p>Switch from macOS to Windows and back again, or access the folder with three different AI agents. You're not locked into a specific interface, software, or AI tool.</p><a class="jump" href="#edges">What OKF leaves out on purpose</a></div>
+        <div><h3>Versioned, so a team stays in step</h3><p>When the folder is kept in git, every change is recorded with who made it and why, and everyone works from the same copy.</p><a class="jump" href="#upkeep">Then someone has to keep it current</a></div>
       </div>
     </div>
   </div>
@@ -290,7 +298,8 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Start with one page</h2>
     <div class="prose">
-      <p>OKF calls each page a concept. A concept can describe something you could point at, like a database table, or an idea, like how the shop defines a number. This one defines how long a repair takes.</p>
+      <p>OKF calls each page a <code>concept</code>. A concept can describe a real thing (like a database table) or an idea (like how a metric is defined).</p>
+      <p><b>Example:</b> This page defines &ldquo;turnaround time&rdquo; at a bike shop.</p>
     </div>
     <div class="fig">
       <p class="cue"><b>Try it</b>Select any line to see what it is for.</p>
@@ -309,7 +318,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       </div>
     </div>
     <div class="prose">
-      <p>Only one line is required: <code>type</code>. A page with a header that says what kind of thing it is, and nothing else, already conforms. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a> Everything else is there because it earns its place, and you add it when you need it.</p>
+      <p>Only one line is required: <code>type</code>. A page with a header that says what kind of page it is, and nothing else, already conforms. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a> Everything else is added as needed.</p>
     </div>
   </div>
 </section>
@@ -319,11 +328,22 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>What goes in the folder</h2>
     <div class="prose">
-      <p>The whole folder is called a bundle. You can organize it however suits the subject. The shop sorts its pages into tables, metrics, computations, playbooks and policies, and OKF has no opinion about those names or how deep they go. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
-      <p>Around the pages sit four small files that do the housekeeping. Two are OKF's own: it reserves their names, and both are optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> Two are older habits that sit comfortably beside it.</p>
+      <p>The whole folder is called a <code>bundle</code>. You can organize the bundle however suits the subject; OKF has no opinion about folder names or how deep they go. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p><b>Example:</b> The bike shop sorts its pages into tables, metrics, computations, playbooks, and policies.</p>
+      <p>The bike shop's bundle has four &ldquo;housekeeping&rdquo; files that help a user find their way around. They aren't the knowledge itself; they are just overviews, indexes, change logs, etc.</p>
+      <table class="tbl">
+        <thead><tr><th scope="col">File</th><th scope="col">Whose rule</th><th scope="col">What it's for</th></tr></thead>
+        <tbody>
+          <tr><td>index.md</td><td><span class="stamp whose in">Part of OKF</span></td><td>A table of contents: one line per page or folder</td></tr>
+          <tr><td>log.md</td><td><span class="stamp whose in">Part of OKF</span></td><td>A dated list of what changed</td></tr>
+          <tr><td>README.md</td><td><span class="stamp whose">Not OKF</span></td><td>A welcome note for a person opening the folder for the first time</td></tr>
+          <tr><td>AGENTS.md</td><td><span class="stamp whose">Not OKF</span></td><td>House rules for the AI agent that maintains the folder</td></tr>
+        </tbody>
+      </table>
+      <p>OKF reserves the first two file names, and neither file is required. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a></p>
     </div>
     <div class="fig">
-      <p class="cue"><b>Try it</b>Open each of the four housekeeping files.</p>
+      <p class="cue"><b>Try it</b>Open each of the four housekeeping files from the bike shop.</p>
       <div class="two u-two">
         <div class="file">
           <div class="file-tab"><span>halfway-cycles/</span><span id="a-count"></span></div>
@@ -345,13 +365,13 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 <!-- ───────────── 2. the folder ───────────── -->
 <section class="part" id="the-folder" data-part="the-folder">
   <div class="body">
-    <h2>A folder an agent can walk</h2>
+    <h2>A folder an agent can navigate</h2>
     <div class="prose">
-      <p>The index is what keeps an agent from reading everything. It reads the top listing, picks a folder, reads that folder's listing, and opens the one page it needs.</p>
-      <p>Folders say where a page lives. Links say what it has to do with other pages. A link is an ordinary markdown link, and the sentence around it says what the relationship is: this metric is computed from that table, this playbook follows that policy. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#61-links-between-concepts">§6.1</a> An agent uses both. The listings get it to the right page, and a link in that page takes it to the next one.</p>
+      <p>The <code>index</code> is what keeps an agent from needing to read everything. Instead, the agent reads the top listing, picks a folder, reads that folder's listing, and opens the one page it needs.</p>
+      <p>Folder names help identify where specific files are. Links within a file indicate how a file is related to other pages. A link is an ordinary markdown link, and the sentence around it describes its relationship to this other page: this metric is computed from that table, this playbook follows that policy, etc. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#61-links-between-concepts">§6.1</a> An agent uses both. The folders get it to the right page, and a link in that page takes it to the next one.</p>
     </div>
     <div class="fig">
-      <p class="cue"><b>Try it</b>Pick a question and watch the path it takes. Then switch to the map to see the same pages arranged by their links.</p>
+      <p class="cue"><b>Try it</b>Pick a question and watch the path the agent takes. Then switch to the map to see the same pages arranged by their links.</p>
       <div class="seg" role="group" aria-label="Question to ask" id="q-seg"></div>
       <div class="row">
         <span class="cap">Show the bundle</span>
@@ -394,11 +414,17 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Who wrote it, who checked it, and is it still true</h2>
     <div class="prose">
-      <p>A folder that agents keep rewriting raises questions a plain note never had to answer. Version 0.2 answers them with three header lines. <code>generated</code> says who or what wrote the page. <code>verified</code> lists who has checked it against its sources. <code>stale_after</code> is the date after which nobody should take it on faith. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#5-provenance-trust-and-lifecycle">§5</a></p>
+      <p>Since files can be rewritten or edited at any time, OKF uses three header lines to track updates.</p>
+      <ul>
+        <li><code>generated</code> says who or what wrote the page.</li>
+        <li><code>verified</code> lists who has checked it against its sources.</li>
+        <li><code>stale_after</code> is the date after which the data should be verified before using. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#5-provenance-trust-and-lifecycle">§5</a></li>
+      </ul>
       <p>A reader works out a trust level from <code>verified</code> alone. No entry means unverified. Entries from machines only means machine-confirmed. Any entry from a person means human-reviewed. Staleness is a separate question: a page the owner signed off in January can still be out of date by September.</p>
+      <p><b>Example:</b> The bike shop's bundle.</p>
     </div>
     <div class="fig">
-      <p class="cue"><b>Try it</b>Drag the date and watch the shop's bundle age. Then pick a page and sign it off yourself.</p>
+      <p class="cue"><b>Try it</b>Drag the date slider and watch the shop's bundle age. Then pick a page and sign it off yourself.</p>
       <div class="clock">
         <label for="t-range">The date a reader opens the bundle</label>
         <output id="t-date" for="t-range"></output>
@@ -423,7 +449,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       </div>
     </div>
     <div class="prose">
-      <p>Trust levels are advice. Nothing in the format blocks a reader from opening an unverified page. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#53-trust-tiers">§5.3</a> The point is that the reader, human or agent, can tell the difference and decide how careful to be.</p>
+      <p>Trust levels are advice, not blockers. Nothing actually blocks a reader from opening or using an unverified page. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#53-trust-tiers">§5.3</a> The goal is that the reader, human or agent, can identify potential issues and decide how careful to be.</p>
     </div>
   </div>
 </section>
@@ -433,8 +459,15 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Letting an agent write the first draft</h2>
     <div class="prose">
-      <p>Nobody wants to write two hundred of these pages by hand. The OKF repository includes a sample agent that drafts a bundle for you. Its example reads a Google BigQuery database, but the shape of the work is not tied to any product.</p>
-      <p>The agent asks a source three things: what do you have, tell me about this one, and show me a little of it. Then it writes one page per thing it found. A second pass reads the documentation around the source and decides, page by page, whether to add to an existing concept, write a new reference page, or skip it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format#how-the-reference-agent-works">README</a></p>
+      <p>Nobody wants to write two hundred of these pages by hand. The OKF repository includes a sample agent that drafts a bundle for you. The sample reads a Google BigQuery database, but the process is the same for any source.</p>
+      <p>The agent asks a source three things:</p>
+      <ol>
+        <li>What do you have? (files, tables, etc.)</li>
+        <li>Tell me about this one (get details on each item)</li>
+        <li>Show me a little (review a sample of each item)</li>
+      </ol>
+      <p>Then the agent writes one page per item it found. A second pass reads the documentation around the source and decides, page by page, whether to add new details to an existing concept, write a new reference page, or skip it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format#how-the-reference-agent-works">README</a></p>
+      <p>In the sample code, the first two questions (&ldquo;What do you have?&rdquo; and &ldquo;Tell me about this one&rdquo;) are required of any source. The third (&ldquo;Show me a little&rdquo;) is optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/sources/base.py">base.py</a></p>
     </div>
     <div class="fig">
       <p class="cue"><b>Try it</b>Swap the source. The three questions stay the same.</p>
@@ -451,8 +484,11 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       <p class="status" id="b-status" aria-live="polite"></p>
     </div>
     <div class="prose">
-      <p>Two limits on that picture. The sample agent ships with one source, BigQuery. The other three here show what the same questions would mean elsewhere, and you would write those connectors yourself. In the sample code, the first two questions are required of any source and the third is optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/sources/base.py">base.py</a></p>
-      <p>And every page the agent writes starts out unverified. A first draft gives people something to check, which is faster than writing it, and it is still their job.</p>
+      <p>Two limitations:</p>
+      <ol>
+        <li>The sample agent can only read one source (BigQuery). The sources in the demo are illustrations. They show how the three questions would apply to other sources, but the sample agent can't connect to them.</li>
+        <li>Every page the agent writes starts out unverified. A first draft gives people something to check, which is faster than writing it, and it is still their job.</li>
+      </ol>
     </div>
   </div>
 </section>
@@ -462,12 +498,12 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Then someone has to keep it current</h2>
     <div class="prose">
-      <p>A first draft is the easy part. Prices change, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects agents to keep rewriting these pages, not to write them once. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
-      <p>Plain text is what makes that workable. A person and a model read the same file, so the model does the bookkeeping and the person reads what changed. Keep the folder in git, on GitHub or anywhere else, and each change arrives as a diff with a name and a date on it. A team stays in step the same way: everyone, and every agent, sends changes to one shared copy, and git flags the collisions. The specification recommends git, names no host, and requires neither. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
-      <p>Here is one change, followed all the way through. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words.</p>
+      <p>A first draft is the easy part. Metrics change, tables gain columns, and an untended folder is wrong within a year. The OKF specification expects agents to keep updating these pages, not to complete them once and never edit them. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
+      <p>Plain text is what makes that workable. A person and a model read the same file, so the model does the bookkeeping and the person reads what changed. With the folder on GitHub or any other git host, the team stays in sync: everyone, and every agent, sends changes to one shared copy, and git flags any conflicts. The OKF specification recommends git, names no host, and requires neither. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p><b>Example:</b> The bike shop starts accepting e-bikes, and Mara, the owner, tells the shop's agent in a few words.</p>
     </div>
     <div class="fig">
-      <p class="ask"><span class="c">Mara, to the agent</span>&ldquo;We take e-bikes from this week. $110 an hour. Write up how we handle them.&rdquo;</p>
+      <p class="ask"><span class="c">Mara, to the agent</span>&ldquo;We take e-bikes from this week forward. $110 an hour. Write up how we handle them.&rdquo;</p>
       <p class="cue"><b>Try it</b>Select a file to see what happened to it. Then switch to the owner's sign-off.</p>
       <div class="seg" role="group" aria-label="Which commit to show" id="u-seg"></div>
       <div class="two u-two">
@@ -488,7 +524,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       <p class="cap">A commit is one saved set of changes in git. Lines marked + were added and lines marked &minus; were removed. &ldquo;Edited since its check&rdquo; is not an OKF trust level. It is what a careful reader works out by comparing the two dates in the header.</p>
     </div>
     <div class="prose">
-      <p>Notice what the agent left alone: the sign-off and the expiry date. Nothing in OKF stops an agent from rewriting them. The format records who wrote a page and who checked it, and leaves the question of who is allowed to do which to you. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#52-trust-generated-and-verified">§5.2</a> That is why the rule sits in the shop's AGENTS file and not in the specification.</p>
+      <p>Notice what the agent left alone: the sign-off and the expiry date. Nothing in OKF stops an agent from rewriting them. The format has space to capture who wrote a page and who checked it, and lets you decide who is allowed to edit those fields. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#52-trust-generated-and-verified">§5.2</a> That is why the rule sits in the shop's AGENTS file and not in the OKF specification.</p>
       <p>The review cost Mara one screen. She read two short diffs, not the whole folder, and her approval is a commit like any other: dated, attributed, and easy to undo.</p>
     </div>
   </div>
@@ -499,8 +535,12 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>A number that can show its work</h2>
     <div class="prose">
-      <p>Definitions are one problem. Numbers are a harder one. Ask an agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
-      <p>OKF's answer is a page type called an Attested Computation. It holds the approved calculation and names the blanks an agent may fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, checks two things: that what actually ran is the approved calculation with only the blanks filled in, and that the number on screen is the one that run produced. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a> <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#105-how-a-consumer-uses-it-informative">§10.5</a></p>
+      <p>Getting trustworthy numbers can be a real issue. Ask an AI agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
+      <p>OKF's solution is a page type called an Attested Computation. It holds the approved formula for calculating a number, along with the blanks that an AI agent is allowed to fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, checks two things:</p>
+      <ol>
+        <li>That what actually ran is the approved calculation with only the blanks filled in. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></li>
+        <li>That the number on screen is the one that run produced. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#105-how-a-consumer-uses-it-informative">§10.5</a></li>
+      </ol>
     </div>
     <div class="fig">
       <p class="cue"><b>Try it</b>The shop's work orders live in a Postgres database. Run the calculation as written, then let the agent improvise.</p>
@@ -528,7 +568,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
       </div>
     </div>
     <div class="prose">
-      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> says the definition was checked and found right, by a person or by a process. Attestation says this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
+      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> confirms that the definition was checked, by a person or by a process. Attestation confirms that this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
       <p>The format records the calculation and how to check it. It does not run anything itself, and version 0.2 leaves the details of how receipts and verdicts travel to a later revision.</p>
     </div>
   </div>
@@ -537,21 +577,21 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 <!-- ───────────── 7. edges ───────────── -->
 <section class="part" id="edges" data-part="edges">
   <div class="body">
-    <h2>What it leaves out on purpose</h2>
+    <h2>What OKF leaves out on purpose</h2>
     <div class="prose">
       <p>Most of OKF's usefulness comes from how little it insists on. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#non-goals">Non-goals</a></p>
     </div>
     <div class="fig" style="margin-top:1.6rem">
       <div class="cols">
-        <div><h3>No official list of types</h3><p>You name your own. A shop has playbooks and policies; a lab has protocols; a household has appliances and accounts.</p></div>
-        <div><h3>No required software</h3><p>No server, database, or query language. A text editor and a folder are enough, and version control is recommended, not demanded.</p></div>
-        <div><h3>No replacing what you have</h3><p>It points at your database schemas and documents. It does not try to become them.</p></div>
+        <div><h3>No official list of types</h3><p>You name your own. A bike shop has playbooks and policies; a lab has protocols; a household has appliances and accounts.</p></div>
+        <div><h3>No required software</h3><p>No mandatory server, database, or query language. A text editor and a folder are enough, and version control is recommended, not demanded.</p></div>
+        <div><h3>No replacing what you have</h3><p>OKF points at your existing database schemas and documents; it does not try to become them.</p></div>
         <div><h3>No strict gatekeeping</h3><p>A reader must not reject a bundle for unknown types, extra header lines, broken links, or a missing index.</p></div>
       </div>
     </div>
     <div class="prose" style="margin-top:2.2rem">
       <h3>What teams add on top</h3>
-      <p>Most teams layer house rules over the format: a fixed list of page types, a check date on single facts instead of whole pages, a rule that the log is only ever added to, a line saying which of two overlapping pages wins. None of that is in the specification, and none of it breaks it. It helps to know which rules are OKF and which are yours.</p>
+      <p>Most teams layer house rules over the format: a fixed list of page types, a check date on single facts instead of whole pages, a rule that the log is only ever added to, a line saying which of two overlapping pages wins. None of that is in the OKF specification, and none of it breaks it. It helps to know which rules are OKF and which are yours.</p>
     </div>
   </div>
 </section>
@@ -561,14 +601,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   <div class="body">
     <h2>Point an agent at what you have</h2>
     <div class="prose">
-      <p>You do not write the first pages by hand. You read them. The steps are the ones from the first-draft section, with your own source in place of the bike shop's.</p>
+      <p>You do not write the first pages by hand. You read them. The steps are the same ones used in the bike shop examples, with your own source in place of the bike shop's.</p>
     </div>
     <div class="fig">
       <ol class="steps">
         <li>Pick one source people keep asking you about: a database, a shared drive, a codebase, a wiki.</li>
         <li>Give an agent read access to it, and the brief below. Any capable agent will do. The format does not care which.</li>
         <li>Read what comes back. Fix what is wrong, then add a <code>verified</code> line to each page you would stand behind, and a <code>stale_after</code> date to anything that expires on a schedule, like prices.</li>
-        <li>Put the folder in git and write your house rules into an AGENTS file. From then on an update is a diff to read, not a rewrite.</li>
+        <li>Put the folder in git and write your house rules into an AGENTS file. From then on, an update is a diff for you to review (not a lengthy rewrite).</li>
       </ol>
       <div class="file brief">
         <div class="file-tab"><span>brief for the agent</span><button class="btn" id="copy">Copy</button></div>
@@ -578,7 +618,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 2. For each thing worth describing, write one markdown file with a YAML header: type, title, a one-sentence description, and generated: { by: your name and version, at: the time now in UTC }.
 
-3. In the body, say what it is and how it is used. Link to related pages with ordinary markdown links. Do not invent details. Where you are unsure, say so on the page.
+3. In the body, say what the thing is and how it is used. Link to related pages with ordinary markdown links. Do not invent details. Where you are unsure, say so on the page.
 
 4. List where each page's content came from under sources in the header. Every entry needs a resource: the URL or path of the thing you read. For something too broad to point at, such as all the queries run against a table, state its scope in words.
 
@@ -586,10 +626,10 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 6. When the pages are done, write an index.md in every folder, one line per page using its description, and start a log.md with today's date as the first heading.
 
-The specification is at https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md
+The OKF specification is at https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md
 Follow it wherever this brief is silent.</pre>
       </div>
-      <p class="cap">This brief was written for this page as a starting point. It is not part of the specification. The OKF repository's sample agent works from a longer one. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/prompts/reference_instruction.md">sample agent's instructions</a></p>
+      <p class="cap">This brief was written for this page as a starting point. It is not part of the OKF specification. The OKF repository's sample agent works from a longer one. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/prompts/reference_instruction.md">sample agent's instructions</a></p>
     </div>
   </div>
 </section>
@@ -603,7 +643,7 @@ Follow it wherever this brief is silent.</pre>
         <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format">The OKF repository</a>, including the sample agent and four sample bundles. Apache 2.0 license.</li>
       </ul>
     </div>
-    <p class="cap">Halfway Cycles, its staff, and its numbers are invented for this explainer. This is an independent explainer and is not affiliated with Google. It was written by an AI model directed by a person, and a second AI model reviewed it against the specification. No person has checked it line by line, so check anything that matters against the source.</p>
+    <p class="cap">The bike shop Halfway Cycles, its staff, and its numbers are invented for this explainer. This is an independent explainer and is not affiliated with Google. It was written by an AI model directed by a person, and a second AI model reviewed it against the OKF specification. A person then edited it for clarity. No person has checked it against the specification, so check anything that matters against the source.</p>
   </div>
 </footer>
 
@@ -627,7 +667,7 @@ var redraw=function(box,html){
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
 
 /* ───────── section navigation ───────── */
-var NAV=[["why","Why"],["one-file","One page"],["layout","In the folder"],["the-folder","Walking it"],["trust","Trust"],["first-draft","First draft"],["upkeep","Upkeep"],["numbers","Numbers"],["edges","Left out on purpose"],["start","Start one"]];
+var NAV=[["why","Why"],["one-file","One page"],["layout","In the folder"],["the-folder","Navigating it"],["trust","Trust"],["first-draft","First draft"],["upkeep","Upkeep"],["numbers","Numbers"],["edges","Left out on purpose"],["start","Start one"]];
 $("toc").innerHTML=NAV.map(function(n,i){return '<li><a href="#'+n[0]+'" data-id="'+n[0]+'"><span class="n">'+(i+1)+"</span><span>"+n[1]+"</span></a></li>"}).join("");
 NAV.forEach(function(n,i){
   var h=$(n[0]).querySelector("h2"), k=document.createElement("p");
@@ -686,7 +726,7 @@ var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
     [null,""],
     ["body","# Definition"],
     [null,""],
-    ["link","Turnaround is the time between drop-off and ready in [work orders](/tables/work_orders.md)."],
+    ["link","Turnaround is the time between when a bike is dropped off and when it's ready in [work orders](/tables/work_orders.md)."],
     ["foot","Days spent waiting on parts count.[^owner-note]"],
     [null,""],
     ["link","Compute it with the [median turnaround computation](/computations/turnaround-median.md)."],
@@ -695,18 +735,18 @@ var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
   ];
   var BARE=[["fence","---"],["type",K("type","Metric")],["fence","---"],[null,""],["body","Days from drop-off to ready for pickup."]];
   var NOTES={
-    fence:["The header fence","Three dashes open the header and three close it. Between them is a short list of named facts about the page, written in YAML. Below them is the page itself.","4","#4-concept-documents"],
-    type:["type: the only required line","It says what kind of thing the page describes. There is no official list of types. You pick words that explain themselves, and a reader has to cope with ones it has never seen.","4.1","#41-frontmatter"],
-    title:["title","A display name for people. If you leave it out, a reader can fall back on the file name.","4.1","#41-frontmatter"],
-    desc:["description","One sentence. Index pages are meant to reuse it, and search results and previews can too, so it is worth writing well.","4.1","#41-frontmatter"],
-    tags:["tags","Short labels that cut across folders. A reader that wants a page per tag can build one by scanning headers.","3.1","#31-reserved-filenames"],
+    fence:["The header fence","A header is bracketed with three dashes at the beginning and three dashes at the end. Between the dashes is a short list of facts about the page. Below the header is the page itself.","4","#4-concept-documents"],
+    type:["type: the only required line","This line says what kind of page you're viewing. There is no official list of types. You pick words that explain themselves, and a reader has to cope with ones it has never seen.","4.1","#41-frontmatter"],
+    title:["title","The page's display name. If you leave it out, a reader can fall back on the file name.","4.1","#41-frontmatter"],
+    desc:["description","A one-sentence summary. The description might be referenced in index pages, search results, and previews, so it's worth writing well.","4.1","#41-frontmatter"],
+    tags:["tags","Short labels that help you find related content, like a hashtag on social media. A reader can find all pages with the same tag without manually searching in every folder.","3.1","#31-reserved-filenames"],
     generated:["generated: who wrote this","Who or what produced the current text, and when. Agents are written as name/version, people as human:name, and scheduled jobs as process:name.","5.2","#52-trust-generated-and-verified"],
-    verified:["verified: who checked this","Kept apart from generated because the writer and the checker are often different. It can hold several checks. A reader derives the page's trust level from this line alone.","5.2","#52-trust-generated-and-verified","5.3","#53-trust-tiers"],
-    stale:["stale_after: when to stop trusting it","A date and time written out in full. From that moment on, the page counts as stale. It is a fixed moment and not a countdown, so checking it is one comparison.","5.5","#55-lifecycle-stale_after"],
-    sources:["sources: what it was built from","A source can carry a short id so a sentence in the body can point at it. It can also carry signals such as who wrote it and how often it is used, and the reader judges credibility from those.","5.1","#51-provenance-sources"],
-    body:["The body","Ordinary markdown, with no required sections. The specification suggests headings, lists, and tables over long paragraphs, because structure helps both kinds of reader.","4.2","#42-body"],
-    link:["A link to another page","A normal markdown link. A path starting with a slash is read from the top of the bundle, which is the recommended form. The sentence around the link says what the relationship is.","6.1","#61-links-between-concepts"],
-    foot:["A footnote tied to a source","The footnote's label matches a source id in the header. That pins one claim to one source, and it still works after an agent reorders the list.","5.1","#51-provenance-sources"]
+    verified:["verified: who checked this","Kept apart from generated because the writer and the checker are often different. This line can hold several checks. A reader derives the page's trust level from this line alone.","5.2","#52-trust-generated-and-verified","5.3","#53-trust-tiers"],
+    stale:["stale_after: when to stop trusting this data","After this date and time pass, the page counts as stale.","5.5","#55-lifecycle-stale_after"],
+    sources:["sources: what it was built from","A source can carry a short id for easy reference within the file. It can also carry signals such as who wrote it and how often it is used, and the reader judges credibility from those.","5.1","#51-provenance-sources"],
+    body:["The body","Ordinary markdown, with no required sections. The OKF specification suggests headings, lists, and tables over long paragraphs, because structure helps both kinds of reader.","4.2","#42-body"],
+    link:["A link to another page","A normal markdown link. The sentence around the link explains context for this other page.","6.1","#61-links-between-concepts"],
+    foot:["A footnote tied to a source","The footnote's label matches a source id in the header. That pins one claim to one source, and it still works if you reorder the list.","5.1","#51-provenance-sources"]
   };
   var mode="full", sel="type";
   function draw(){
@@ -1126,7 +1166,7 @@ var MAP={}; // the link map registers trail() and play() here; the folder walk d
        return d;})(),
      note:(function(){var n={};
        n[AM]='<span class="mono">AGENTS.md &middot; not part of OKF</span>The house rules, and the first thing the agent reads. Everything in this file is the shop\'s own choice. OKF says nothing about who may write which line.';
-       n[RM]='<span class="mono">README.md &middot; not part of OKF</span>The front door for people. The agent reads it and leaves it alone. It carries a one-line header only because it sits inside the bundle.';
+       n[RM]='<span class="mono">README.md &middot; not part of OKF</span>The starting place for people. The agent reads it and leaves it alone.';
        n[LR]='<span class="mono">a page, changed by the agent</span>The agent added the rate and stamped <code>generated</code> with its own name. It left the owner\'s two lines alone, so the January sign-off now sits above a sentence Mara has not read. OKF allows that. The two lines are independent, and a reader spots the gap by comparing their dates.'+ref("52-trust-generated-and-verified","§5.2");
        n[EB]='<span class="mono">a new page</span>It has no <code>verified</code> line, so every reader treats it as unverified until someone checks it.'+ref("53-trust-tiers","§5.3");
        n[PI]='<span class="mono">index.md &middot; part of OKF</span>One new line, reusing the new page\'s own description so the listing matches the page. The format lets a tool generate this file, and the shop\'s house rules tell the agent to rebuild it.'+ref("8-index-files","§8");
