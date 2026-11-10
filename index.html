@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="The Open Knowledge Format, explained with a made-up bike shop and nothing that depends on one vendor's tools.">
+<title>A Folder That Knows What It Knows</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<style>
+/* Layout: a narrow left rail names each section as a file in the essay's own bundle;
+   prose runs in one column beside it, and the working exhibits take the full width. */
+:root{
+  --paper:#F1F4F6; --sheet:#FFFFFF; --ink:#15212C; --ink-2:#536270; --rule:#D2D9E0;
+  --link:#1D4ED8; --link-wash:#E3EAFC;
+  --none:#6C7985; --machine:#9A5800; --human:#17734A; --stale:#B4372C;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F161D; --sheet:#18222C; --ink:#E6ECF1; --ink-2:#9AA9B6; --rule:#2B3845;
+    --link:#8FB0FF; --link-wash:#1D2C4B;
+    --none:#8C99A5; --machine:#E2A345; --human:#5FC48E; --stale:#F27D70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F161D; --sheet:#18222C; --ink:#E6ECF1; --ink-2:#9AA9B6; --rule:#2B3845;
+  --link:#8FB0FF; --link-wash:#1D2C4B;
+  --none:#8C99A5; --machine:#E2A345; --human:#5FC48E; --stale:#F27D70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 1.125rem/1.62 var(--body);margin:0}
+.wrap{max-width:76rem;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2.5rem 4rem}
+a{color:var(--link);text-underline-offset:.18em}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+code,.mono{font-family:var(--mono);font-size:.86em}
+p{margin:0}
+.prose{max-width:39rem;display:flex;flex-direction:column;gap:1.05rem}
+.prose + .fig, .fig + .prose{margin-top:1.9rem}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.015em}
+h1{font-size:clamp(2.6rem,7.2vw,5.4rem);line-height:.98;font-weight:750;letter-spacing:-.035em;max-width:14ch}
+h2{font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.08;font-weight:700}
+h3{font-size:1.2rem;font-weight:650;line-height:1.25}
+.ref{font:500 .7em var(--mono);white-space:nowrap;text-decoration:none;color:var(--ink-2);border-bottom:1px dotted var(--ink-2)}
+.ref:hover{color:var(--link);border-color:var(--link)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem;padding-block:1.5rem 3.5rem}
+.hero-main{display:flex;flex-direction:column;gap:1.6rem}
+.lede{font-size:1.3rem;line-height:1.5;max-width:36rem}
+.cat{font:500 .95rem/1.5 var(--mono);color:var(--ink-2);max-width:39rem}
+.cat b{color:var(--ink);font-weight:500}
+.cat .prompt{color:var(--link)}
+
+/* sections */
+.part{display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem;padding-block:3.5rem;border-top:1px solid var(--rule)}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1rem);align-self:start;display:flex;flex-direction:column;gap:.5rem;font:500 .76rem/1.4 var(--mono);color:var(--ink-2)}
+.rail .path{overflow-wrap:anywhere}
+.rail .path b{color:var(--ink);font-weight:600}
+.hdr-toggle{align-self:flex-start;font:inherit;color:var(--link);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:.2em}
+.hdr{margin:0;font:400 .7rem/1.55 var(--mono);color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere}
+.body{min-width:0}
+.body > h2{margin-bottom:1.3rem}
+
+/* shared pieces */
+[hidden]{display:none!important}
+.fig{display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.cap{font:400 .8rem/1.5 var(--mono);color:var(--ink-2);max-width:46rem}
+.file{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;min-width:0}
+.file-tab{display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;font:500 .76rem var(--mono);color:var(--ink-2);padding:.5rem .9rem;border-bottom:1px solid var(--rule)}
+.file-body{font:400 .8rem/1.7 var(--mono);padding:.6rem 0;margin:0}
+pre.file-body{padding:.7rem .9rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.k{color:var(--link)} .c{color:var(--ink-2)}
+.stamp{display:inline-block;font:600 .66rem/1.3 var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:.14rem .42rem;border:1.5px solid currentColor;border-radius:3px;white-space:nowrap}
+.t-none{color:var(--none)} .t-machine{color:var(--machine)} .t-human{color:var(--human)} .t-stale{color:var(--stale)}
+.btn{font:500 .8rem var(--mono);color:var(--ink);background:var(--sheet);border:1px solid var(--ink-2);border-radius:4px;padding:.42rem .75rem;cursor:pointer}
+.btn:hover{border-color:var(--link);color:var(--link)}
+.btn.primary{background:var(--link);border-color:var(--link);color:var(--sheet)}
+.btn.primary:hover{color:var(--sheet);filter:brightness(1.1)}
+.btn[disabled]{opacity:.45;cursor:default}
+.seg{display:inline-flex;flex-wrap:wrap;gap:.35rem}
+.seg .btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.row{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center}
+.two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1rem;align-items:start}
+.note{background:var(--link-wash);border-radius:6px;padding:.9rem 1rem;font-size:.98rem;line-height:1.5;min-width:0}
+.note .mono{font-size:.78rem;color:var(--ink-2);display:block;margin-bottom:.3rem}
+
+/* 1. one file */
+.ln{display:block;width:100%;text-align:left;background:none;border:0;font:inherit;color:inherit;cursor:pointer;padding:0 .9rem 0 calc(.9rem + 2ch);text-indent:-2ch;white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.7em}
+.ln:hover{background:var(--link-wash)}
+.ln[aria-pressed="true"]{background:var(--link);color:var(--sheet)}
+.ln[aria-pressed="true"] .k,.ln[aria-pressed="true"] .c{color:inherit}
+.ln.blank{cursor:default;pointer-events:none}
+
+/* 2. the folder */
+.tree{font:400 .8rem/1.75 var(--mono);list-style:none;margin:0;padding:.6rem .9rem}
+.tree li{white-space:pre;color:var(--ink-2)}
+.tree li.dir{color:var(--ink)}
+.tree li.opened{color:var(--ink);font-weight:600}
+.tree li.opened::after{content:"  read";font-weight:400;color:var(--human)}
+.tree li.current{background:var(--link);color:var(--sheet);margin-inline:-.4rem;padding-inline:.4rem;border-radius:3px}
+.tree li.current::after{content:"  reading";color:inherit}
+.pane ul{list-style:none;margin:.4rem 0 0;padding:0}
+.pane li{padding:.1rem .4rem;margin-inline:-.4rem;border-radius:3px}
+.pane li.follow{background:var(--link-wash);color:var(--link);font-weight:600}
+.pane .dim{color:var(--ink-2)}
+.crumbs{font:400 .78rem/1.6 var(--mono);color:var(--ink-2);overflow-wrap:anywhere}
+.crumbs b{color:var(--ink);font-weight:600}
+.meter{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem .8rem;align-items:center;font:400 .78rem var(--mono);font-variant-numeric:tabular-nums}
+.bar{height:.5rem;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--link);width:0;transition:width .4s}
+
+/* 3. links */
+.scroll-x{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule);border-radius:6px}
+#map{display:block;width:100%;min-width:640px;height:auto}
+#map text{font:500 12px var(--mono);fill:var(--ink);paint-order:stroke;stroke:var(--sheet);stroke-width:5px;stroke-linejoin:round}
+#map .muted{fill:var(--ink-2)}
+#map .dot{fill:var(--ink);stroke:var(--sheet);stroke-width:2}
+#map .fdot{fill:var(--sheet);stroke:var(--ink-2);stroke-width:1.5}
+#map .te{stroke:var(--rule);stroke-width:1.5;fill:none}
+#map .le{stroke:var(--ink-2);stroke-width:1.3;fill:none}
+#map .le.on{stroke:var(--link);stroke-width:2.2}
+#map .node{cursor:pointer}
+#map .node.on .dot{fill:var(--link)}
+#map .node.on text{fill:var(--link);font-weight:600}
+#map .node.off{opacity:.35}
+#map .ah{fill:var(--ink-2)} #map .ah-on{fill:var(--link)}
+
+/* 4. trust */
+.clock{display:grid;gap:.4rem}
+.clock label{font:500 .8rem var(--mono);color:var(--ink-2)}
+.clock output{font:700 1.5rem var(--display);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--link);margin:0}
+.ticks{display:flex;justify-content:space-between;font:400 .68rem var(--mono);color:var(--ink-2)}
+.tally{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;font:500 .8rem var(--mono);font-variant-numeric:tabular-nums}
+.tally span{display:inline-flex;gap:.4rem;align-items:center}
+.pages{list-style:none;margin:0;padding:0;background:var(--sheet);border:1px solid var(--rule);border-radius:6px}
+.pages li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem .75rem;align-items:center;padding:.55rem .8rem;border-bottom:1px solid var(--rule);cursor:pointer}
+.pages li:last-child{border-bottom:0}
+.pages li[aria-selected="true"]{background:var(--link-wash)}
+.pages li.unborn{opacity:.45}
+.pages .p{font:500 .8rem var(--mono);overflow-wrap:anywhere}
+.pages .by{font:400 .72rem var(--mono);color:var(--ink-2);grid-column:1}
+.pages .st{display:flex;flex-wrap:wrap;gap:.3rem;justify-content:flex-end;grid-row:1 / span 2;grid-column:2}
+
+/* 5. building */
+.build{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:1rem;align-items:start}
+.build h3{font:600 .76rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:.5rem}
+.stack{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.35rem}
+.stack li{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:.4rem .6rem;font:400 .78rem/1.4 var(--mono);overflow-wrap:anywhere;transition:opacity .3s,border-color .2s}
+.stack li.hid{opacity:0}
+.stack li.faint{opacity:.35}
+.stack li.hot{border-color:var(--link);box-shadow:0 0 0 1px var(--link)}
+.stack li .ty{display:block;color:var(--ink-2);font-size:.7rem}
+.stack li .tag{float:right;margin-left:.5rem}
+.verbs{list-style:none;margin:1.6rem 0 0;padding:0;display:flex;flex-direction:column;gap:.5rem;width:11.5rem}
+.verbs li{border:1px dashed var(--ink-2);border-radius:4px;padding:.45rem .6rem;font:400 .74rem/1.4 var(--mono);color:var(--ink-2);transition:all .2s}
+.verbs li b{display:block;color:var(--ink);font-weight:600}
+.verbs li.hot{border-style:solid;border-color:var(--link);background:var(--link-wash)}
+.verbs li.hot b{color:var(--link)}
+.around{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+.around li{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:.5rem .65rem;font:400 .76rem/1.45 var(--mono);transition:opacity .3s}
+.around li.hid{opacity:.25}
+.around li b{display:block;font-weight:600}
+.around li span{color:var(--ink-2)}
+.status{font:500 .8rem/1.5 var(--mono);min-height:1.5em}
+
+/* 6. numbers */
+.sql{display:block;white-space:pre-wrap;overflow-wrap:anywhere;padding:0 .9rem 0 calc(.9rem + 4ch);text-indent:-4ch}
+.sql.diff{background:color-mix(in srgb,var(--stale) 16%,var(--sheet));color:var(--stale)}
+.verdict{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;padding:.7rem .9rem;border-top:1px solid var(--rule);font:400 .8rem/1.5 var(--mono)}
+.shown{padding:1rem;border-top:1px solid var(--rule)}
+.shown .lab{font:500 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.shown .val{font:750 2.6rem/1.1 var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.shown .val.held{color:var(--stale);font-size:1.5rem;line-height:1.3}
+.shown p{font-size:.95rem;line-height:1.45;color:var(--ink-2);margin-top:.3rem}
+
+/* 7. edges */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem 2.5rem;max-width:52rem}
+.cols h3{margin-bottom:.4rem}
+.cols p{font-size:1rem;line-height:1.5}
+ol.steps{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.55rem;max-width:39rem}
+footer{border-top:1px solid var(--rule);padding-block:2.5rem 0;display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem}
+footer .body{display:flex;flex-direction:column;gap:1.4rem;font-size:.98rem;line-height:1.55}
+footer ul{margin:.3rem 0 0;padding-left:1.2rem}
+
+@media (max-width:900px){
+  .hero,.part,footer{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;margin-bottom:1.1rem}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .build{grid-template-columns:minmax(0,1fr)}
+  .verbs{flex-direction:row;flex-wrap:wrap;width:auto;margin-top:0}
+  .verbs li{flex:1 1 9rem}
+  .around{grid-template-columns:minmax(0,1fr)}
+  .cols{grid-template-columns:minmax(0,1fr)}
+  body{font-size:1.06rem}
+  .lede{font-size:1.18rem}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="rail" aria-hidden="true"><span class="path">halfway-cycles/</span></div>
+  <div class="hero-main">
+    <p class="mono c" style="font-size:.82rem;letter-spacing:.04em">THE OPEN KNOWLEDGE FORMAT, EXPLAINED WITH A BIKE SHOP</p>
+    <h1>A folder that knows what it knows</h1>
+    <p class="lede">The Open Knowledge Format (OKF) is a small open standard for writing down what an organization knows, so that people and AI agents can both read it. It is a folder of plain text files, each with a short header. Version 0.2 adds the part that matters once agents start writing those files: who wrote each page, who checked it, and whether it is still true.</p>
+    <p class="cat"><span class="prompt">$</span> <b>cat metrics/turnaround-time.md</b><br>The specification's own summary is &ldquo;If you can <code>cat</code> a file, you can read OKF.&rdquo; (<code>cat</code> is the command that prints a file to the screen.) This page walks through the format with a made-up bike shop, Halfway Cycles, and nothing that depends on one vendor's tools.</p>
+  </div>
+</header>
+
+<!-- ───────────── 1. one file ───────────── -->
+<section class="part" id="one-file" data-part="one-file">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>Start with one page</h2>
+    <div class="prose">
+      <p>OKF calls each page a concept. A concept can describe something you could point at, like a database table, or an idea, like how the shop defines a number. This one defines how long a repair takes. Select any line to see what it is for.</p>
+    </div>
+    <div class="fig">
+      <div class="row">
+        <div class="seg" role="group" aria-label="How much of the page to show">
+          <button class="btn" id="f-full" aria-pressed="true">Full page</button>
+          <button class="btn" id="f-bare" aria-pressed="false">Bare minimum</button>
+        </div>
+      </div>
+      <div class="two">
+        <div class="file">
+          <div class="file-tab"><span>metrics/turnaround-time.md</span><span id="f-count"></span></div>
+          <div class="file-body" id="f-lines"></div>
+        </div>
+        <div class="note" id="f-note" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Only one line is required: <code>type</code>. A page with a header that says what kind of thing it is, and nothing else, already conforms. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#11-conformance">§11</a> Everything else is there because it earns its place, and you add it when you need it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 2. the folder ───────────── -->
+<section class="part" id="the-folder" data-part="the-folder">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>A folder an agent can walk</h2>
+    <div class="prose">
+      <p>The whole folder is called a bundle. You can organize it however suits the subject. Two file names are reserved, and both are optional. <code>index.md</code> lists what is in a folder, one line per item. <code>log.md</code> records what changed, newest first. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p>The index is what keeps an agent from reading everything. It reads the top listing, picks a folder, reads that folder's listing, and opens the one page it needs.</p>
+      <p>Folders say where a page lives. Links say what it has to do with other pages. A link is an ordinary markdown link, and the sentence around it says what the relationship is: this metric is computed from that table, this playbook follows that policy. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#61-links-between-concepts">§6.1</a> An agent uses both. The listings get it to the right page, and a link in that page takes it to the next one.</p>
+      <p>Pick a question and watch the path it takes. Then switch to the map to see the same pages arranged by what they link to.</p>
+    </div>
+    <div class="fig">
+      <div class="seg" role="group" aria-label="Question to ask" id="q-seg"></div>
+      <div class="row">
+        <span class="cap">Show the bundle</span>
+        <div class="seg" role="group" aria-label="How to show the bundle">
+          <button class="btn" id="v-files" aria-pressed="true">As files</button>
+          <button class="btn" id="v-map" aria-pressed="false">As a map of links</button>
+        </div>
+      </div>
+      <div class="fig" id="v-files-pane">
+        <div class="two">
+          <div class="file">
+            <div class="file-tab"><span>halfway-cycles/</span><span id="q-total"></span></div>
+            <ul class="tree" id="q-tree"></ul>
+          </div>
+          <div class="fig">
+            <div class="file">
+              <div class="file-tab"><span id="q-file">index.md</span><span>what the agent is reading</span></div>
+              <div class="file-body pane" id="q-pane" style="padding:.7rem .9rem" aria-live="polite"></div>
+            </div>
+            <div class="crumbs" id="q-crumbs"></div>
+            <div class="meter">
+              <span id="q-files"></span><div class="bar"><i id="q-fbar"></i></div>
+              <span id="q-words"></span><div class="bar"><i id="q-wbar"></i></div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">Word counts are for this example bundle. The saving grows with the folder: the path stays three or four files long whether the bundle holds sixteen files or sixteen hundred.</p>
+      </div>
+      <div class="fig" id="v-map-pane" hidden>
+        <div class="crumbs" id="m-info" aria-live="polite"></div>
+        <div class="scroll-x"><svg id="map" viewBox="0 0 760 430" role="img" aria-label="The bike shop bundle drawn as a graph of links between its nine pages"></svg></div>
+        <p class="cap">The map shows the nine pages and leaves out the index and log files. Select a page to see what it links to and what links to it. A link to a page that does not exist is allowed. The specification treats it as knowledge nobody has written yet, and a reader must not reject the bundle over it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 3. trust ───────────── -->
+<section class="part" id="trust" data-part="trust">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>Who wrote it, who checked it, and is it still true</h2>
+    <div class="prose">
+      <p>A folder that agents keep rewriting raises questions a plain note never had to answer. Version 0.2 answers them with three header lines. <code>generated</code> says who or what wrote the page. <code>verified</code> lists who has checked it against its sources. <code>stale_after</code> is the date after which nobody should take it on faith. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#5-provenance-trust-and-lifecycle">§5</a></p>
+      <p>A reader works out a trust level from <code>verified</code> alone. No entry means unverified. Entries from machines only means machine-confirmed. Any entry from a person means human-reviewed. Staleness is a separate question: a page the owner signed off in January can still be out of date by September.</p>
+      <p>Drag the date and watch the shop's bundle age. Then pick a page and sign it off yourself.</p>
+    </div>
+    <div class="fig">
+      <div class="clock">
+        <label for="t-range">The date a reader opens the bundle</label>
+        <output id="t-date" for="t-range"></output>
+        <input type="range" id="t-range" min="0" max="545" step="1">
+        <div class="ticks"><span>Jan 2026</span><span>Jul 2026</span><span>Jan 2027</span><span>Jun 2027</span></div>
+      </div>
+      <div class="tally" id="t-tally" aria-live="polite"></div>
+      <div class="two">
+        <ul class="pages" id="t-pages" role="listbox" aria-label="Pages in the bundle"></ul>
+        <div class="fig">
+          <div class="file">
+            <div class="file-tab"><span id="t-path"></span><span>header on this date</span></div>
+            <pre class="file-body" id="t-yaml"></pre>
+          </div>
+          <div class="row">
+            <button class="btn primary" id="t-sign">Sign it off as a person</button>
+            <button class="btn" id="t-push">Move the stale date 6 months out</button>
+            <button class="btn" id="t-reset">Undo my changes</button>
+          </div>
+          <p class="cap" id="t-why" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Trust levels are advice. Nothing in the format blocks a reader from opening an unverified page. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#53-trust-tiers">§5.3</a> The point is that the reader, human or agent, can tell the difference and decide how careful to be.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 4. building ───────────── -->
+<section class="part" id="first-draft" data-part="first-draft">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>Letting an agent write the first draft</h2>
+    <div class="prose">
+      <p>Nobody wants to write two hundred of these pages by hand. The OKF repository includes a sample agent that drafts a bundle for you. Its example reads a Google BigQuery database, but the shape of the work is not tied to any product.</p>
+      <p>The agent asks a source three things: what do you have, tell me about this one, and show me a little of it. Then it writes one page per thing it found. A second pass reads the documentation around the source and decides, page by page, whether to add to an existing concept, write a new reference page, or skip it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format#how-the-reference-agent-works">README</a></p>
+      <p>Swap the source. The three questions stay the same.</p>
+    </div>
+    <div class="fig">
+      <div class="row">
+        <div class="seg" role="group" aria-label="Source to explore" id="b-seg"></div>
+        <button class="btn" id="b-run">Run it again</button>
+      </div>
+      <div class="build">
+        <div><h3 id="b-srcname">The source</h3><ul class="stack" id="b-src"></ul></div>
+        <ul class="verbs" id="b-verbs"></ul>
+        <div><h3>The bundle</h3><ul class="stack" id="b-out"></ul></div>
+      </div>
+      <div><h3 style="font:600 .76rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:.5rem">Second pass: reading around the source</h3><ul class="around" id="b-around"></ul></div>
+      <p class="status" id="b-status" aria-live="polite"></p>
+    </div>
+    <div class="prose">
+      <p>Two limits on that picture. The sample agent ships with one source, BigQuery. The other three here show what the same questions would mean elsewhere, and you would write those connectors yourself. In the sample code, the first two questions are required of any source and the third is optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/src/reference_agent/sources/base.py">base.py</a></p>
+      <p>And every page the agent writes starts out unverified. A first draft gives people something to check, which is faster than writing it, and it is still their job.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 5. numbers ───────────── -->
+<section class="part" id="numbers" data-part="numbers">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>A number that can show its work</h2>
+    <div class="prose">
+      <p>Definitions are one problem. Numbers are a harder one. Ask an agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
+      <p>OKF's answer is a page type called an Attested Computation. It holds the approved calculation and names the blanks an agent may fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, compares what actually ran against what was approved. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></p>
+      <p>The shop keeps its work orders in a Postgres database. Run the calculation both ways.</p>
+    </div>
+    <div class="fig">
+      <div class="two">
+        <div class="file">
+          <div class="file-tab"><span>computations/turnaround-median.md</span><span class="stamp t-human">human-reviewed</span></div>
+          <pre class="file-body" id="n-file"></pre>
+        </div>
+        <div class="fig">
+          <div class="row">
+            <span class="cap">month =</span>
+            <div class="seg" role="group" aria-label="Month" id="n-months"></div>
+          </div>
+          <div class="row">
+            <button class="btn primary" id="n-ok">Run it as written</button>
+            <button class="btn" id="n-bad">Let the agent improvise</button>
+          </div>
+          <div class="file" aria-live="polite">
+            <div class="file-tab"><span>receipt: what actually ran</span><span id="n-run"></span></div>
+            <div class="file-body" id="n-sql"></div>
+            <div class="verdict" id="n-verdict"></div>
+            <div class="shown" id="n-shown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Checking a page and checking a run are different jobs, and the format keeps both. <code>verified</code> says a person agreed the definition is right. Attestation says this particular run used that definition. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#106-verification-versus-attestation">§10.6</a></p>
+      <p>The format records the calculation and how to check it. It does not run anything itself, and version 0.2 leaves the details of how receipts and verdicts travel to a later revision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 6. edges ───────────── -->
+<section class="part" id="edges" data-part="edges">
+  <div class="rail"></div>
+  <div class="body">
+    <h2>What it leaves out on purpose</h2>
+    <div class="prose">
+      <p>Most of OKF's usefulness comes from how little it insists on. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#non-goals">Non-goals</a></p>
+    </div>
+    <div class="fig" style="margin-top:1.6rem">
+      <div class="cols">
+        <div><h3>No official list of types</h3><p>You name your own. A shop has playbooks and policies; a lab has protocols; a household has appliances and accounts.</p></div>
+        <div><h3>No required software</h3><p>No server, database, or query language. A text editor and a folder are enough, and version control is recommended, not demanded.</p></div>
+        <div><h3>No replacing what you have</h3><p>It points at your database schemas and documents. It does not try to become them.</p></div>
+        <div><h3>No strict gatekeeping</h3><p>A reader must not reject a bundle for unknown types, extra header lines, broken links, or a missing index.</p></div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:2.2rem">
+      <h3>What teams add on top</h3>
+      <p>Most teams layer house rules over the format: a fixed list of page types, a check date on single facts instead of whole pages, a rule that the log is only ever added to, a line saying which of two overlapping pages wins. None of that is in the specification, and none of it breaks it. It helps to know which rules are OKF and which are yours.</p>
+      <h3 style="margin-top:1rem">Start one in ten minutes</h3>
+    </div>
+    <div class="fig" style="margin-top:1rem">
+      <ol class="steps">
+        <li>Make a folder. Write one page about the thing people ask you about most.</li>
+        <li>Give it a header with a <code>type</code>, and a one-sentence <code>description</code>.</li>
+        <li>When there are more than a handful of pages, add an <code>index.md</code> that lists them.</li>
+        <li>When an agent starts writing pages, add <code>generated</code>. When a person checks one, add <code>verified</code>.</li>
+        <li>Put a <code>stale_after</code> date on anything that goes out of date on a schedule, like prices.</li>
+      </ol>
+      <div class="file" style="max-width:39rem">
+        <div class="file-tab"><span>policies/labor-rates.md</span><button class="btn" id="copy">Copy</button></div>
+        <pre class="file-body" id="starter">---
+type: Policy
+title: Labor rates
+description: What the shop charges per hour, and when work is free.
+generated: { by: human:mara, at: 2026-01-15T10:00:00Z }
+verified: { by: human:mara, at: 2026-01-15T10:00:00Z }
+stale_after: 2026-09-01T00:00:00Z
+---
+
+Standard bench rate is $90 an hour, billed in quarter hours.
+Warranty work on parts we sold is free.
+See the [warranty playbook](/playbooks/warranty-claim.md).</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="rail" style="position:static"><span class="path">essay/<b>index.md</b></span></div>
+  <div class="body">
+    <div>
+      <h3>This page is its own example</h3>
+      <p style="max-width:39rem;margin-top:.4rem">Each section above carries a header the way an OKF page would. Open one with the link in the left margin. The page was written by an AI model directed by a person, and no person has signed it off in the header yet, so by OKF's own rule it is <span class="stamp t-none">unverified</span>. Check anything that matters against the specification.</p>
+    </div>
+    <pre class="hdr" id="self-index" style="font-size:.76rem"></pre>
+    <div>
+      <h3>Sources</h3>
+      <ul>
+        <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md">Open Knowledge Format specification, version 0.2</a> (read 2026-11-09)</li>
+        <li><a href="https://github.com/GoogleCloudPlatform/open-knowledge-format">The OKF repository</a>, including the sample agent and four sample bundles. Apache 2.0 license.</li>
+      </ul>
+    </div>
+    <p class="cap">Halfway Cycles, its staff, and its numbers are invented for this explainer. This is an independent explainer and is not affiliated with Google.</p>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")};
+var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
+var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
+var WRITTEN="2026-11-10T03:32:00Z";
+
+/* ───────── the essay as a bundle: section headers ───────── */
+var PARTS={
+  "one-file":{title:"Start with one page",desc:"What a single OKF concept looks like, line by line.",src:["4","5","11"]},
+  "the-folder":{title:"A folder an agent can walk",desc:"Bundles, index files, links between pages, and reading only what a question needs.",src:["3","6","8","9"]},
+  "trust":{title:"Who wrote it, who checked it, and is it still true",desc:"The generated, verified, and stale_after lines, and the trust levels readers derive.",src:["5","7"]},
+  "first-draft":{title:"Letting an agent write the first draft",desc:"The explore-and-draft pattern from the sample agent, generalized beyond one database.",src:["README","base.py"]},
+  "numbers":{title:"A number that can show its work",desc:"Attested Computations: approved calculations and a mechanical check that they ran.",src:["10"]},
+  "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start.",src:["1","11"]}
+};
+Object.keys(PARTS).forEach(function(id){
+  var p=PARTS[id], sec=document.querySelector('[data-part="'+id+'"]'), rail=sec.querySelector(".rail");
+  var y="---\ntype: Essay Section\ntitle: "+p.title+"\ndescription: "+p.desc+"\ngenerated: { by: claude/fable-5.2, at: "+WRITTEN+" }\nsources:\n"+
+    p.src.map(function(s){
+      var isSec=/^\d+$/.test(s);
+      return "  - id: "+(isSec?"spec-"+s:s.replace(".","-").toLowerCase())+"\n    title: "+(isSec?"OKF v0.2 specification, section "+s:"OKF repository, "+s);
+    }).join("\n")+"\n---";
+  rail.innerHTML='<span class="path">essay/<b>'+id+'.md</b></span><button class="hdr-toggle" aria-expanded="false">Show header</button><pre class="hdr" hidden></pre>';
+  var b=rail.querySelector("button"), pre=rail.querySelector("pre"); pre.textContent=y;
+  b.addEventListener("click",function(){var open=pre.hidden; pre.hidden=!open; b.setAttribute("aria-expanded",String(open)); b.textContent=open?"Hide header":"Show header";});
+});
+$("self-index").textContent="# A folder that knows what it knows\n\n"+Object.keys(PARTS).map(function(id){return "* ["+PARTS[id].title+"]("+id+".md) - "+PARTS[id].desc}).join("\n");
+
+/* ───────── the bike shop bundle ───────── */
+var DIRS=[
+  ["tables","What is in the shop's database."],
+  ["metrics","How the shop's headline numbers are defined."],
+  ["computations","Approved queries for those numbers."],
+  ["playbooks","How recurring jobs get done."],
+  ["policies","The rules the owner has set."]
+];
+var C={
+  "tables/work_orders":{type:"Table",title:"Work orders",desc:"One row per repair job, from drop-off to pickup.",words:410,links:["tables/customers","tables/parts"]},
+  "tables/parts":{type:"Table",title:"Parts",desc:"Every part the shop stocks, what it costs, and what it sells for.",words:360,links:[]},
+  "tables/customers":{type:"Table",title:"Customers",desc:"One row per customer, with how they like to be contacted.",words:240,links:[]},
+  "metrics/turnaround-time":{type:"Metric",title:"Turnaround time",desc:"Days from drop-off to ready for pickup, as a monthly median.",words:280,links:["tables/work_orders","computations/turnaround-median"]},
+  "metrics/parts-margin":{type:"Metric",title:"Parts margin",desc:"What the shop keeps on parts after paying for them.",words:260,links:["tables/parts"]},
+  "computations/turnaround-median":{type:"Attested Computation",title:"Median turnaround for a month",desc:"The approved query behind turnaround time.",words:330,links:["tables/work_orders"]},
+  "playbooks/spring-tune-up":{type:"Playbook",title:"Spring tune-up",desc:"The checklist every bike gets in the March to May rush.",words:520,links:["policies/labor-rates","tables/parts"]},
+  "playbooks/warranty-claim":{type:"Playbook",title:"Warranty claim",desc:"What to do when a part fails inside its warranty.",words:450,links:["policies/labor-rates","tables/work_orders","tables/parts"]},
+  "policies/labor-rates":{type:"Policy",title:"Labor rates",desc:"What the shop charges per hour, and when work is free.",words:300,links:[]}
+};
+var IDS=Object.keys(C);
+var inDir=function(d){return IDS.filter(function(id){return id.indexOf(d+"/")===0})};
+var base=function(id){return id.split("/")[1]};
+var wc=function(s){return s.split(/\s+/).filter(Boolean).length};
+
+/* ───────── 1. one file ───────── */
+(function(){
+  var K=function(k,v){return '<span class="k">'+k+'</span>: '+esc(v)};
+  var FULL=[
+    ["fence","---"],
+    ["type",K("type","Metric")],
+    ["title",K("title","Turnaround time")],
+    ["desc",K("description","Days from drop-off to ready for pickup, as a monthly median.")],
+    ["tags",K("tags","[service, headline-number]")],
+    ["generated",K("generated","{ by: shop-agent/1.0, at: 2026-02-10T09:00:00Z }")],
+    ["verified",K("verified","{ by: human:mara, at: 2026-03-02T16:30:00Z }")],
+    ["stale",K("stale_after","2027-03-01T00:00:00Z")],
+    ["sources",'<span class="k">sources</span>:'],
+    ["sources","  - "+K("id","owner-note")],
+    ["sources","    "+K("resource","https://halfway.example/notes/turnaround")],
+    ["sources","    "+K("title","Owner's note on turnaround")],
+    ["fence","---"],
+    [null,""],
+    ["body","# Definition"],
+    [null,""],
+    ["link","Turnaround is the time between drop-off and ready in [work orders](/tables/work_orders.md)."],
+    ["foot","Days spent waiting on parts count.[^owner-note]"],
+    [null,""],
+    ["link","Compute it with the [median turnaround computation](/computations/turnaround-median.md)."],
+    [null,""],
+    ["foot","[^owner-note]: Owner's note on turnaround"]
+  ];
+  var BARE=[["fence","---"],["type",K("type","Metric")],["fence","---"],[null,""],["body","Days from drop-off to ready for pickup."]];
+  var NOTES={
+    fence:["The header fence","Three dashes open the header and three close it. Between them is a short list of named facts about the page, written in YAML. Below them is the page itself.","4","#4-concept-documents"],
+    type:["type: the only required line","It says what kind of thing the page describes. There is no official list of types. You pick words that explain themselves, and a reader has to cope with ones it has never seen.","4.1","#41-frontmatter"],
+    title:["title","A display name for people. If you leave it out, a reader can fall back on the file name.","4.1","#41-frontmatter"],
+    desc:["description","One sentence. Index pages and search results reuse it word for word, so it is worth writing well.","4.1","#41-frontmatter"],
+    tags:["tags","Short labels that cut across folders. A reader that wants a page per tag can build one by scanning headers.","3.1","#31-reserved-filenames"],
+    generated:["generated: who wrote this","Who or what produced the current text, and when. Agents are written as name/version, people as human:name, and scheduled jobs as process:name.","5.2","#52-trust-generated-and-verified"],
+    verified:["verified: who checked this","Kept apart from generated because the writer and the checker are often different. It can hold several checks. A reader derives the page's trust level from this line alone.","5.2","#52-trust-generated-and-verified"],
+    stale:["stale_after: when to stop trusting it","A plain date. On or after it, the page counts as stale. It is a fixed date and not a countdown, so checking it is one comparison.","5.5","#55-lifecycle-stale_after"],
+    sources:["sources: what it was built from","Each source gets a short id so a sentence in the body can point at it. A source can also carry signals such as who wrote it and how often it is used, and the reader judges credibility from those.","5.1","#51-provenance-sources"],
+    body:["The body","Ordinary markdown, with no required sections. The specification suggests headings, lists, and tables over long paragraphs, because structure helps both kinds of reader.","4.2","#42-body"],
+    link:["A link to another page","A normal markdown link. A path starting with a slash is read from the top of the bundle, which is the recommended form. The sentence around the link says what the relationship is.","6.1","#61-links-between-concepts"],
+    foot:["A footnote tied to a source","The footnote's label matches a source id in the header. That pins one claim to one source, and it still works after an agent reorders the list.","5.1","#51-provenance-sources"]
+  };
+  var mode="full", sel="type";
+  function draw(){
+    var L=mode==="full"?FULL:BARE;
+    $("f-lines").innerHTML=L.map(function(l){
+      return l[0]?'<button class="ln" data-k="'+l[0]+'" aria-pressed="'+(l[0]===sel)+'">'+l[1]+'</button>':'<span class="ln blank"> </span>';
+    }).join("");
+    $("f-count").textContent=mode==="full"?"":"still a conforming page";
+    var n=NOTES[sel];
+    $("f-note").innerHTML='<span class="mono">'+esc(n[0])+'</span>'+esc(n[1])+' <a class="ref" href="'+SPEC+n[3]+'">§'+n[2]+'</a>';
+    $("f-full").setAttribute("aria-pressed",String(mode==="full"));
+    $("f-bare").setAttribute("aria-pressed",String(mode==="bare"));
+  }
+  $("f-lines").addEventListener("click",function(e){var b=e.target.closest(".ln[data-k]"); if(b){sel=b.dataset.k; draw();}});
+  $("f-full").addEventListener("click",function(){mode="full"; draw();});
+  $("f-bare").addEventListener("click",function(){mode="bare"; if(!/^(fence|type|body)$/.test(sel)) sel="type"; draw();});
+  draw();
+})();
+
+/* ───────── 2. the folder ───────── */
+var MAP={}; // the link map registers trail() and play() here; the folder walk drives both views
+(function(){
+  var FILES={}; // path -> {words, kind}
+  var rootIdx="# Halfway Cycles\n"+DIRS.map(function(d){return "* ["+d[0]+"]("+d[0]+"/) - "+d[1]}).join("\n");
+  FILES["index.md"]={words:wc(rootIdx)};
+  FILES["log.md"]={words:120};
+  DIRS.forEach(function(d){
+    var txt="# "+d[0]+"\n"+inDir(d[0]).map(function(id){return "* ["+C[id].title+"]("+base(id)+".md) - "+C[id].desc}).join("\n");
+    FILES[d[0]+"/index.md"]={words:wc(txt)};
+    inDir(d[0]).forEach(function(id){FILES[id+".md"]={words:C[id].words}});
+  });
+  var PATHS=Object.keys(FILES), TOTALW=PATHS.reduce(function(a,p){return a+FILES[p].words},0);
+  $("q-total").textContent=PATHS.length+" files, "+TOTALW.toLocaleString("en-US")+" words";
+  var QS=[
+    {q:"How long does a repair usually take?",path:["index.md","metrics/index.md","metrics/turnaround-time.md","computations/turnaround-median.md"],end:"Found the definition and the approved query to run."},
+    {q:"A hub failed after two months. What do we do?",path:["index.md","playbooks/index.md","playbooks/warranty-claim.md","policies/labor-rates.md"],end:"Found the steps and the rule that warranty labor is free."},
+    {q:"Where do we keep what parts cost us?",path:["index.md","tables/index.md","tables/parts.md"],end:"Found the parts table and its cost column."}
+  ];
+  var tree=$("q-tree");
+  var rows=[["index.md","index.md",0],["log.md","log.md",0]];
+  DIRS.forEach(function(d){
+    rows.push([null,d[0]+"/",0]);
+    rows.push([d[0]+"/index.md","index.md",1]);
+    inDir(d[0]).forEach(function(id){rows.push([id+".md",base(id)+".md",1])});
+  });
+  tree.innerHTML=rows.map(function(r){return '<li'+(r[0]?' data-p="'+r[0]+'"':' class="dir"')+'>'+(r[2]?"  ":"")+esc(r[1])+'</li>'}).join("");
+  tree.style.whiteSpace="pre";
+  $("q-seg").innerHTML=QS.map(function(q,i){return '<button class="btn" data-i="'+i+'" aria-pressed="false">'+esc(q.q)+'</button>'}).join("");
+
+  function paneFor(p,next){
+    var h="";
+    if(p==="index.md"){
+      h='<div class="dim"># Halfway Cycles</div><ul>'+DIRS.map(function(d){
+        return '<li class="'+(next===d[0]+"/index.md"?"follow":"")+'">* ['+d[0]+']('+d[0]+'/) - '+esc(d[1])+'</li>'}).join("")+'</ul>';
+    } else if(/\/index\.md$/.test(p)){
+      var d=p.split("/")[0];
+      h='<div class="dim"># '+d+'</div><ul>'+inDir(d).map(function(id){
+        return '<li class="'+(next===id+".md"?"follow":"")+'">* ['+esc(C[id].title)+']('+base(id)+'.md) - '+esc(C[id].desc)+'</li>'}).join("")+'</ul>';
+    } else {
+      var c=C[p.replace(/\.md$/,"")];
+      h='<div><span class="k">type</span>: '+esc(c.type)+'</div><div><span class="k">title</span>: '+esc(c.title)+'</div><div><span class="k">description</span>: '+esc(c.desc)+'</div>';
+      if(c.links.length) h+='<div class="dim" style="margin-top:.5rem">links in the body</div><ul>'+c.links.map(function(l){
+        return '<li class="'+(next===l+".md"?"follow":"")+'">['+esc(C[l].title)+'](/'+l+'.md)</li>'}).join("")+'</ul>';
+      else h+='<div class="dim" style="margin-top:.5rem">no links out</div>';
+    }
+    return h;
+  }
+  var token=0;
+  function show(q,step,done){
+    var seen=q.path.slice(0,step+1), cur=q.path[step];
+    tree.querySelectorAll("li[data-p]").forEach(function(li){
+      li.className=li.dataset.p===cur&&!done?"current":(seen.indexOf(li.dataset.p)>=0?"opened":"");
+    });
+    $("q-file").textContent=cur;
+    $("q-pane").innerHTML=paneFor(cur,q.path[step+1]);
+    $("q-crumbs").innerHTML=seen.map(function(p){return "<b>"+esc(p)+"</b>"}).join(" → ")+(done?"<br>"+esc(q.end):"");
+    var w=seen.reduce(function(a,p){return a+FILES[p].words},0);
+    $("q-files").textContent="opened "+seen.length+" of "+PATHS.length+" files";
+    $("q-words").textContent="read "+w.toLocaleString("en-US")+" of "+TOTALW.toLocaleString("en-US")+" words";
+    $("q-fbar").style.width=(100*seen.length/PATHS.length)+"%";
+    $("q-wbar").style.width=(100*w/TOTALW)+"%";
+  }
+  function pick(i,animate){
+    var q=QS[i], my=++token;
+    MAP.cur=q.path; if(MAP.trail) MAP.trail(q.path);
+    $("q-seg").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.i===i))});
+    if(!animate||calm){show(q,q.path.length-1,true);return;}
+    (async function(){
+      for(var s=0;s<q.path.length;s++){ if(my!==token)return; show(q,s,false); await sleep(1100); }
+      if(my===token) show(q,q.path.length-1,true);
+    })();
+  }
+  $("q-seg").addEventListener("click",function(e){var b=e.target.closest("button"); if(b) pick(+b.dataset.i,true);});
+  function view(map){
+    $("v-files").setAttribute("aria-pressed",String(!map)); $("v-map").setAttribute("aria-pressed",String(map));
+    $("v-files-pane").hidden=map; $("v-map-pane").hidden=!map;
+    if(map&&MAP.play) MAP.play();
+  }
+  $("v-files").addEventListener("click",function(){view(false)});
+  $("v-map").addEventListener("click",function(){view(true)});
+  pick(0,false);
+})();
+
+/* ───────── 2b. the link map (second view of the folder exhibit) ───────── */
+(function(){
+  var NS="http://www.w3.org/2000/svg", svg=$("map");
+  var mk=function(t,a){var n=document.createElementNS(NS,t); for(var k in a) n.setAttribute(k,a[k]); return n;};
+  var TREE={"tables/work_orders":[380,40],"tables/parts":[380,82],"tables/customers":[380,124],"metrics/turnaround-time":[380,172],"metrics/parts-margin":[380,214],
+    "computations/turnaround-median":[380,262],"playbooks/spring-tune-up":[380,310],"playbooks/warranty-claim":[380,352],"policies/labor-rates":[380,400]};
+  var GRAPH={"metrics/turnaround-time":[70,60],"computations/turnaround-median":[330,72],"tables/work_orders":[255,172],"tables/customers":[520,118],
+    "tables/parts":[430,272],"metrics/parts-margin":[575,205],"playbooks/warranty-claim":[195,272],"playbooks/spring-tune-up":[205,372],"policies/labor-rates":[470,385]};
+  // where a label sits in the link view when the default (to the right) would put an arrow through it
+  var LBL={"metrics/turnaround-time":[-6,-15,"start"],"playbooks/warranty-claim":[-12,4,"end"],"playbooks/spring-tune-up":[-12,4,"end"]};
+  var FOLD={tables:[200,82],metrics:[200,193],computations:[200,262],playbooks:[200,331],policies:[200,400]}, ROOT=[40,220];
+  var defs=mk("defs",{});
+  [["ah","ah"],["ah-on","ah-on"]].forEach(function(m){
+    var mark=mk("marker",{id:m[0],viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"});
+    mark.appendChild(mk("path",{d:"M0 0L10 5L0 10z","class":m[1]})); defs.appendChild(mark);
+  });
+  svg.appendChild(defs);
+  var gT=mk("g",{}), gL=mk("g",{}), gF=mk("g",{}), gN=mk("g",{}); [gT,gL,gF,gN].forEach(function(g){svg.appendChild(g)});
+  // folder scaffolding
+  Object.keys(FOLD).forEach(function(d){
+    var f=FOLD[d];
+    gT.appendChild(mk("path",{"class":"te",d:"M"+ROOT[0]+" "+ROOT[1]+"C120 "+ROOT[1]+" 120 "+f[1]+" "+f[0]+" "+f[1]}));
+    inDir(d).forEach(function(id){var t=TREE[id]; gT.appendChild(mk("path",{"class":"te",d:"M"+f[0]+" "+f[1]+"C290 "+f[1]+" 290 "+t[1]+" "+t[0]+" "+t[1]}));});
+    gF.appendChild(mk("circle",{"class":"fdot",cx:f[0],cy:f[1],r:5}));
+    var tx=mk("text",{x:f[0],y:f[1]-11,"text-anchor":"middle","class":"muted"}); tx.textContent=d+"/"; gF.appendChild(tx);
+  });
+  gF.appendChild(mk("circle",{"class":"fdot",cx:ROOT[0],cy:ROOT[1],r:5}));
+  var rt=mk("text",{x:ROOT[0]-8,y:ROOT[1]-13,"class":"muted"}); rt.textContent="halfway-cycles/"; gF.appendChild(rt);
+  // link edges and nodes
+  var edges=[], nodes={};
+  IDS.forEach(function(a){C[a].links.forEach(function(b){var l=mk("line",{"class":"le","marker-end":"url(#ah)"}); gL.appendChild(l); edges.push({a:a,b:b,el:l});});});
+  IDS.forEach(function(id){
+    var g=mk("g",{"class":"node",tabindex:"0",role:"button","aria-label":id});
+    g.appendChild(mk("circle",{"class":"dot",r:6.5}));
+    var t=mk("text",{x:12,y:4}); g.appendChild(t); gN.appendChild(g);
+    nodes[id]={g:g,t:t};
+    var act=function(){sel=(sel===id?null:id); trail=[]; paint();};
+    g.addEventListener("click",act);
+    g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+  });
+  var p=1,sel=null,trail=[],raf=0,timer=0;
+  var ease=function(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
+  var pos=function(id,t){var a=TREE[id],b=GRAPH[id];return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]};
+  function draw(){
+    var t=ease(p);
+    IDS.forEach(function(id){
+      var q=pos(id,t), n=nodes[id], l=t>.5&&LBL[id]||[12,4,"start"];
+      n.g.setAttribute("transform","translate("+q[0].toFixed(1)+" "+q[1].toFixed(1)+")");
+      n.t.textContent=t>.5?id:base(id)+".md"; n.t.setAttribute("x",l[0]); n.t.setAttribute("y",l[1]); n.t.setAttribute("text-anchor",l[2]);
+    });
+    edges.forEach(function(e){
+      var a=pos(e.a,t), b=pos(e.b,t), dx=b[0]-a[0], dy=b[1]-a[1], len=Math.sqrt(dx*dx+dy*dy)||1;
+      e.el.setAttribute("x1",a[0]+dx/len*8); e.el.setAttribute("y1",a[1]+dy/len*8);
+      e.el.setAttribute("x2",b[0]-dx/len*10); e.el.setAttribute("y2",b[1]-dy/len*10);
+    });
+    gT.style.opacity=gF.style.opacity=String(1-t); gL.style.opacity=String(t);
+  }
+  function paint(){
+    var out=sel?C[sel].links:[], inn=sel?IDS.filter(function(i){return C[i].links.indexOf(sel)>=0}):[];
+    var hop=function(e){var i=trail.indexOf(e.a); return i>=0&&trail[i+1]===e.b};
+    var any=sel||trail.length;
+    IDS.forEach(function(id){
+      var on=id===sel||trail.indexOf(id)>=0, near=out.indexOf(id)>=0||inn.indexOf(id)>=0;
+      nodes[id].g.setAttribute("class","node"+(on?" on":"")+(any&&!on&&!near?" off":""));
+    });
+    edges.forEach(function(e){var on=sel?(e.a===sel||e.b===sel):hop(e); e.el.setAttribute("class","le"+(on?" on":"")); e.el.setAttribute("marker-end","url(#"+(on?"ah-on":"ah")+")"); e.el.style.opacity=any&&!on?".25":"1";});
+    var low=function(i){return C[i].title.toLowerCase()}, names=function(a){return a.map(low).join(", ")};
+    $("m-info").innerHTML=sel?"<b>"+esc(C[sel].title)+"</b> links to "+(out.length?esc(names(out)):"nothing")+". Linked from "+(inn.length?esc(names(inn)):"nothing")+"."
+      :trail.length?"The listings led to <b>"+esc(low(trail[0]))+"</b>. "+(trail.length>1?"A link in that page led on to <b>"+esc(trail.slice(1).map(low).join(", then "))+"</b>.":"The answer was on that page, so no link was followed.")
+      :"Select a page to see its links.";
+  }
+  function go(to){
+    var from=p, t0=performance.now(), dur=Math.max(1,900*Math.abs(to-from));
+    cancelAnimationFrame(raf);
+    (function step(){var k=Math.min(1,(performance.now()-t0)/dur); p=from+(to-from)*k; draw(); if(k<1) raf=requestAnimationFrame(step);})();
+  }
+  // the folder walk tells the map which pages a question touched
+  MAP.trail=function(path){
+    trail=path.filter(function(f){return !/(^|\/)(index|log)\.md$/.test(f)}).map(function(f){return f.replace(/\.md$/,"")});
+    sel=null; paint();
+  };
+  // switching to the map starts from the folder arrangement and lets the pages move to where their links put them
+  MAP.play=function(){
+    cancelAnimationFrame(raf); clearTimeout(timer);
+    if(calm){p=1;draw();return;}
+    p=0; draw(); timer=setTimeout(function(){go(1)},500);
+  };
+  draw(); MAP.trail(MAP.cur||[]);
+})();
+
+/* ───────── 3. trust ───────── */
+(function(){
+  var BASE=Date.UTC(2026,0,1), DAY=864e5, MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var day=function(s){var a=s.split("-");return Math.round((Date.UTC(+a[0],+a[1]-1,+a[2])-BASE)/DAY)};
+  var dt=function(n){return new Date(BASE+n*DAY)};
+  var pad=function(n){return (n<10?"0":"")+n};
+  var iso=function(n){var d=dt(n);return d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate())};
+  var nice=function(n){var d=dt(n);return d.getUTCDate()+" "+MON[d.getUTCMonth()]+" "+d.getUTCFullYear()};
+  var AG="shop-agent/1.0";
+  var P={
+    "policies/labor-rates":{gen:["human:mara","2026-01-15"],ver:[["human:mara","2026-01-15"]],stale:"2026-09-01",why:"Rates change every autumn, so the owner set it to expire in September."},
+    "tables/work_orders":{gen:[AG,"2026-02-10"],ver:[["process:nightly-schema-check","2026-02-11"]],why:"A nightly job confirms the columns still match the database. No person has read the description."},
+    "tables/parts":{gen:[AG,"2026-02-10"],ver:[["process:nightly-schema-check","2026-02-11"]],stale:"2026-08-01",why:"Supplier prices are renegotiated each summer."},
+    "tables/customers":{gen:[AG,"2026-02-10"],ver:[["process:nightly-schema-check","2026-02-11"]],why:"Checked by the nightly job only."},
+    "metrics/turnaround-time":{gen:[AG,"2026-02-10"],ver:[["human:mara","2026-03-02"]],stale:"2027-03-01",why:"The owner read the agent's draft and agreed with the definition."},
+    "metrics/parts-margin":{gen:[AG,"2026-02-10"],ver:[],why:"The agent wrote it and nobody has checked it. It may be right. A reader cannot tell."},
+    "computations/turnaround-median":{gen:[AG,"2026-02-10"],ver:[["human:mara","2026-03-02"],["process:nightly-schema-check","2026-03-03"]],stale:"2027-03-01",why:"Checked by a person and by a machine. The person's check sets the level."},
+    "playbooks/spring-tune-up":{gen:["human:mara","2026-02-20"],ver:[["human:dev","2026-03-10"]],stale:"2026-06-01",why:"Written by the owner, checked by the head mechanic, and meant to expire when the spring rush ends."},
+    "playbooks/warranty-claim":{gen:[AG,"2026-02-10"],ver:[],why:"Drafted by the agent from old emails. Unchecked."}
+  };
+  var ORDER=Object.keys(P), mine={}, sel="metrics/parts-margin";
+  var range=$("t-range"), todayN=Math.round((Date.UTC(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())-BASE)/DAY);
+  if(!(todayN>=day("2026-11-09")&&todayN<=545)) todayN=day("2026-11-09");
+  range.value=todayN;
+  function state(id,now){
+    var p=P[id], m=mine[id]||{}, ver=p.ver.concat(m.ver||[]).filter(function(v){return day(v[1])<=now});
+    var stale=m.stale&&day(m.stale.set)<=now?m.stale.to:p.stale;
+    var tier=ver.some(function(v){return v[0].indexOf("human:")===0})?"human":(ver.length?"machine":"none");
+    return {born:day(p.gen[1])<=now,ver:ver,stale:stale,isStale:!!stale&&now>=day(stale),tier:tier};
+  }
+  var TN={none:"unverified",machine:"machine-confirmed",human:"human-reviewed"};
+  function draw(){
+    var now=+range.value, tally={none:0,machine:0,human:0,stale:0};
+    $("t-date").textContent=nice(now);
+    $("t-pages").innerHTML=ORDER.map(function(id){
+      var s=state(id,now);
+      if(s.born){tally[s.tier]++; if(s.isStale)tally.stale++;}
+      return '<li role="option" tabindex="0" data-id="'+id+'" aria-selected="'+(id===sel)+'" class="'+(s.born?"":"unborn")+'">'+
+        '<span class="p">'+id+'.md</span><span class="by">'+(s.born?"written by "+P[id].gen[0]:"not written yet")+'</span>'+
+        '<span class="st">'+(s.born?'<span class="stamp t-'+s.tier+'">'+TN[s.tier]+'</span>'+(s.isStale?'<span class="stamp t-stale">stale</span>':''):'')+'</span></li>';
+    }).join("");
+    $("t-tally").innerHTML=["none","machine","human"].map(function(t){return '<span><span class="stamp t-'+t+'">'+TN[t]+'</span>'+tally[t]+'</span>'}).join("")+
+      '<span><span class="stamp t-stale">stale</span>'+tally.stale+'</span>';
+    var s=state(sel,now), p=P[sel], y;
+    $("t-path").textContent=sel+".md";
+    if(!s.born) y='<span class="c"># This page does not exist yet on this date.</span>';
+    else{
+      y='<span class="k">type</span>: '+C[sel].type+'\n<span class="k">title</span>: '+C[sel].title+'\n<span class="k">generated</span>: { by: '+p.gen[0]+', at: '+p.gen[1]+'T09:00:00Z }\n';
+      if(s.ver.length) y+='<span class="k">verified</span>:\n'+s.ver.map(function(v){return '  - { by: '+v[0]+', at: '+v[1]+'T09:00:00Z }'}).join("\n")+'\n';
+      else y+='<span class="c"># no verified line</span>\n';
+      y+=s.stale?'<span class="k">stale_after</span>: '+s.stale+'T00:00:00Z'+(s.isStale?'   <span class="c"># passed</span>':''):'<span class="c"># no stale_after line: never expires on its own</span>';
+    }
+    $("t-yaml").innerHTML=y;
+    $("t-why").textContent=s.born?p.why:"";
+    $("t-sign").disabled=$("t-push").disabled=!s.born;
+    $("t-reset").disabled=!Object.keys(mine).length;
+  }
+  $("t-pages").addEventListener("click",function(e){var li=e.target.closest("li"); if(li){sel=li.dataset.id; draw();}});
+  $("t-pages").addEventListener("keydown",function(e){var li=e.target.closest("li"); if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault(); sel=li.dataset.id; draw(); var n=$("t-pages").querySelector('[data-id="'+sel+'"]'); if(n)n.focus();}});
+  range.addEventListener("input",draw);
+  $("t-sign").addEventListener("click",function(){var now=+range.value; (mine[sel]=mine[sel]||{}).ver=(mine[sel].ver||[]).concat([["human:you",iso(now)]]); draw();});
+  $("t-push").addEventListener("click",function(){var now=+range.value; (mine[sel]=mine[sel]||{}).stale={set:iso(now),to:iso(now+183)}; draw();});
+  $("t-reset").addEventListener("click",function(){mine={}; draw();});
+  draw();
+})();
+
+/* ───────── 4. building ───────── */
+(function(){
+  var S=[
+    {name:"A database",label:"The shop's Postgres database",
+      verbs:["tables and views","columns, types, and keys","three rows from each"],
+      items:[["work_orders","tables/work_orders.md","Table"],["parts","tables/parts.md","Table"],["customers","tables/customers.md","Table"],["suppliers","tables/suppliers.md","Table"],["invoices","tables/invoices.md","Table"]],
+      around:[["The till vendor's schema guide","add","adds field meanings to tables/invoices.md"],["The vendor's glossary of terms","new","becomes references/till-glossary.md"],["A forum thread about an old version","skip","not about this database"]]},
+    {name:"A shared drive",label:"The shop's shared drive",
+      verbs:["folders and documents","title, owner, last edited, headings","the first page of each"],
+      items:[["Spring tune-up checklist.docx","playbooks/spring-tune-up.md","Playbook"],["Warranty terms 2026.pdf","policies/warranty-terms.md","Policy"],["Labor rates.xlsx","policies/labor-rates.md","Policy"],["Supplier contacts.xlsx","references/supplier-contacts.md","Reference"],["Opening and closing.docx","playbooks/opening-and-closing.md","Playbook"]],
+      around:[["A hub maker's warranty page","add","adds the claim window to policies/warranty-terms.md"],["The maker's service manual","new","becomes references/hub-service-manual.md"],["An older copy of the checklist","skip","duplicate of a page already written"]]},
+    {name:"A codebase",label:"The booking site's code",
+      verbs:["endpoints, modules, scheduled jobs","signatures, comments, and config","one test or example call"],
+      items:[["POST /bookings","apis/create-booking.md","API Endpoint"],["GET /availability","apis/availability.md","API Endpoint"],["sendReminder()","processes/reminders.md","Process"],["pricing.ts","references/pricing-rules.md","Reference"],["nightly-export job","processes/nightly-export.md","Process"]],
+      around:[["The project README","add","adds setup context to apis/create-booking.md"],["The payment provider's API docs","new","becomes references/payment-provider.md"],["An auto-generated changelog","skip","nothing a reader would need"]]},
+    {name:"A wiki",label:"The staff wiki",
+      verbs:["spaces and pages","page text, links, last editor","recent edits"],
+      items:[["How we quote repairs","playbooks/quoting.md","Playbook"],["New hire first week","playbooks/first-week.md","Playbook"],["Returns","policies/returns.md","Policy"],["Tool calibration log","references/tool-calibration.md","Reference"],["Group rides","playbooks/group-rides.md","Playbook"]],
+      around:[["A linked flat-rate labor guide","add","adds standard times to playbooks/quoting.md"],["A maker's torque chart","new","becomes references/torque-specs.md"],["A dead link","skip","nothing there to read"]]}
+  ];
+  var VERB=["What do you have?","Tell me about this one","Show me a little"], OUT={add:"added to a page",new:"new reference page",skip:"skipped"};
+  var cur=0, token=0;
+  $("b-seg").innerHTML=S.map(function(s,i){return '<button class="btn" data-i="'+i+'" aria-pressed="false">'+esc(s.name)+'</button>'}).join("");
+  function build(s){
+    $("b-srcname").textContent=s.label;
+    $("b-src").innerHTML=s.items.map(function(it){return '<li>'+esc(it[0])+'</li>'}).join("");
+    $("b-verbs").innerHTML=VERB.map(function(v,i){return '<li><b>'+v+'</b>'+esc(s.verbs[i])+'</li>'}).join("");
+    $("b-out").innerHTML=s.items.map(function(it){return '<li><span class="stamp t-none tag">unverified</span>'+esc(it[1])+'<span class="ty">type: '+esc(it[2])+'</span></li>'}).join("")+
+      '<li>'+esc(s.around[1][2].replace("becomes ",""))+'<span class="stamp t-none tag">unverified</span><span class="ty">type: Reference</span></li>'+
+      '<li>index.md, log.md<span class="ty">written last, from the pages above</span></li>';
+    $("b-around").innerHTML=s.around.map(function(a){return '<li><b>'+esc(a[0])+'</b><span>'+OUT[a[1]]+': '+esc(a[2])+'</span></li>'}).join("");
+  }
+  var kids=function(id){return Array.prototype.slice.call($(id).children)};
+  var doneMsg=function(s){return (s.items.length+1)+" pages drafted from "+s.name.toLowerCase()+", every one unverified. Next comes a person."};
+  function pick(i,animate){
+    cur=i; var s=S[i], my=++token; build(s);
+    $("b-seg").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.i===i))});
+    var st=$("b-status");
+    if(!animate||calm){st.textContent=doneMsg(s);return;}
+    var src=kids("b-src"), out=kids("b-out"), vb=kids("b-verbs"), ar=kids("b-around");
+    out.forEach(function(o){o.classList.add("hid")}); ar.forEach(function(o){o.classList.add("hid")}); src.forEach(function(o){o.classList.add("faint")});
+    var hot=function(n){vb.forEach(function(v,j){v.classList.toggle("hot",j===n)})};
+    (async function(){
+      st.textContent="Asking the source what it has."; hot(0);
+      for(var a=0;a<src.length;a++){ await sleep(220); if(my!==token)return; src[a].classList.remove("faint"); }
+      await sleep(500);
+      for(var k=0;k<src.length;k++){
+        if(my!==token)return;
+        src[k].classList.add("hot"); hot(1); st.textContent="Reading "+s.items[k][0]+".";
+        await sleep(420); if(my!==token)return; hot(2);
+        await sleep(380); if(my!==token)return;
+        out[k].classList.remove("hid"); src[k].classList.remove("hot"); st.textContent="Wrote "+s.items[k][1]+".";
+        await sleep(300);
+      }
+      if(my!==token)return; hot(-1); st.textContent="Second pass: reading the documentation around the source.";
+      for(var r=0;r<ar.length;r++){
+        await sleep(700); if(my!==token)return; ar[r].classList.remove("hid");
+        if(s.around[r][1]==="new") out[src.length].classList.remove("hid");
+      }
+      await sleep(600); if(my!==token)return;
+      out[src.length+1].classList.remove("hid"); st.textContent=doneMsg(s);
+    })();
+  }
+  $("b-seg").addEventListener("click",function(e){var b=e.target.closest("button"); if(b) pick(+b.dataset.i,true);});
+  $("b-run").addEventListener("click",function(){pick(cur,true)});
+  pick(0,false);
+})();
+
+/* ───────── 5. numbers ───────── */
+(function(){
+  var OK=["SELECT percentile_cont(0.5) WITHIN GROUP (","         ORDER BY ready_at - dropped_off_at","       ) AS median_turnaround","FROM work_orders","WHERE date_trunc('month', dropped_off_at) = :month"];
+  var BAD=["SELECT avg(ready_at - dropped_off_at)","       AS turnaround","FROM work_orders","WHERE date_trunc('month', dropped_off_at) = :month","  AND waiting_on_parts = false"];
+  var M={"2026-08":["August","3.0 days","1.6 days"],"2026-09":["September","2.5 days","1.4 days"],"2026-10":["October","2.0 days","1.2 days"]};
+  var month="2026-10", way="ok", runs=4810;
+  $("n-file").innerHTML='---\n<span class="k">type</span>: Attested Computation\n<span class="k">title</span>: Median turnaround for a month\n<span class="k">runtime</span>: postgres\n<span class="k">parameters</span>:\n  - { name: month, type: date, required: true }\n<span class="k">executor</span>:\n  resource: /references/run-on-postgres.md\n  receipt: [run_id, executed_sql, result]\n<span class="k">attester</span>:\n  resource: /references/sql-equality.py\n<span class="k">verified</span>: { by: human:mara, at: 2026-03-02T16:30:00Z }\n---\n\n# Computation\n\n'+OK.map(function(l){return "    "+esc(l).replace(":month",'<span class="k">:month</span>')}).join("\n");
+  $("n-months").innerHTML=Object.keys(M).map(function(m){return '<button class="btn" data-m="'+m+'" aria-pressed="false">'+M[m][0]+'</button>'}).join("");
+  var bind=function(lines){return lines.map(function(l){return l.replace(":month","'"+month+"-01'")})};
+  function draw(){
+    var approved=bind(OK), ran=bind(way==="ok"?OK:BAD), pass=way==="ok";
+    $("n-months").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.m===month))});
+    $("n-run").textContent="run_id "+runs;
+    $("n-sql").innerHTML=ran.map(function(l){return '<span class="sql'+(approved.indexOf(l)<0?" diff":"")+'">'+esc(l)+'</span>'}).join("");
+    $("n-verdict").innerHTML=pass
+      ?'<span class="stamp t-human">attested</span><span>What ran matches the approved computation with month filled in.</span>'
+      :'<span class="stamp t-stale">failed</span><span>Three lines differ from the approved computation. The agent averaged instead of taking the median, and dropped jobs that waited on parts.</span>';
+    $("n-shown").innerHTML='<div class="lab">What the reader is shown</div>'+(pass
+      ?'<div class="val">'+M[month][1]+'</div><p>Median turnaround for '+M[month][0]+' 2026, with a link to the run.</p>'
+      :'<div class="val held">Number withheld</div><p>The improvised query returned '+M[month][2]+'. It looks better than the real figure, and it measures something else, so it never reaches the screen.</p>');
+  }
+  $("n-months").addEventListener("click",function(e){var b=e.target.closest("button"); if(b){month=b.dataset.m; runs++; draw();}});
+  $("n-ok").addEventListener("click",function(){way="ok"; runs++; draw();});
+  $("n-bad").addEventListener("click",function(){way="bad"; runs++; draw();});
+  draw();
+})();
+
+/* ───────── copy ───────── */
+$("copy").addEventListener("click",function(){
+  var b=this, pre=$("starter"), done=function(){b.textContent="Copied"; setTimeout(function(){b.textContent="Copy"},1600)};
+  var fallback=function(){var r=document.createRange(); r.selectNodeContents(pre); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent="Selected";};
+  try{navigator.clipboard.writeText(pre.textContent).then(done,fallback)}catch(e){fallback()}
+});
+})();
+</script>
+</body>
+</html>
