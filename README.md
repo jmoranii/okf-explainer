@@ -14,7 +14,8 @@ The whole page is one file, `index.html`. Open it in a browser. There is no buil
 6. **Letting an agent write the first draft.** The explore-and-draft pattern, generalized beyond one database.
 7. **Then someone has to keep it current.** One change followed through git: the agent's commit, then the owner's sign-off.
 8. **A number that can show its work.** Attested Computations.
-9. **What it leaves out on purpose.** Non-goals, and a brief for pointing an agent at your own source.
+9. **What it leaves out on purpose.** Non-goals, and the house rules teams add on top.
+10. **Point an agent at what you have.** A copyable brief for drafting a bundle from your own source.
 
 ## Changing the example
 

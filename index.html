@@ -56,12 +56,19 @@ h3{font-size:1.2rem;font-weight:650;line-height:1.25}
 .cat .prompt{color:var(--link)}
 
 /* sections */
-.part{display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem;padding-block:3.5rem;border-top:1px solid var(--rule)}
-.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1rem);align-self:start;display:flex;flex-direction:column;gap:.5rem;font:500 .76rem/1.4 var(--mono);color:var(--ink-2)}
-.rail .path{overflow-wrap:anywhere}
-.rail .path b{color:var(--ink);font-weight:600}
-.hdr-toggle{align-self:flex-start;font:inherit;color:var(--link);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:.2em}
-.hdr{margin:0;font:400 .7rem/1.55 var(--mono);color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere}
+.main{display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem}
+.col{min-width:0}
+.toc{position:sticky;top:-1.5rem;align-self:start;padding-top:3.5rem;font:500 .76rem/1.4 var(--mono)}
+.toc .lab{letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-size:.68rem;margin-bottom:.6rem}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc a{display:grid;grid-template-columns:1.7em minmax(0,1fr);padding:.3rem .5rem .3rem .6rem;margin-left:-.6rem;color:var(--ink-2);text-decoration:none;border-left:2px solid transparent}
+.toc a:hover{color:var(--link)}
+.toc a[aria-current]{color:var(--ink);font-weight:600;border-left-color:var(--link)}
+.toc .n{font-variant-numeric:tabular-nums}
+.part{padding-block:3.5rem;border-top:1px solid var(--rule)}
+.kick{font:500 .74rem var(--mono);color:var(--ink-2);letter-spacing:.04em;margin-bottom:.6rem}
+.cue{font:500 .82rem/1.5 var(--mono);color:var(--ink);max-width:46rem}
+.cue b{font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--link);border:1.5px solid currentColor;border-radius:3px;padding:.1rem .4rem;margin-right:.7em;white-space:nowrap}
 .body{min-width:0}
 .body > h2{margin-bottom:1.3rem}
 
@@ -219,13 +226,15 @@ input[type=range]{width:100%;accent-color:var(--link);margin:0}
 .jump:hover{text-decoration:underline}
 .brief{max-width:46rem}
 ol.steps{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.55rem;max-width:39rem}
-footer{border-top:1px solid var(--rule);padding-block:2.5rem 0;display:grid;grid-template-columns:11rem minmax(0,1fr);column-gap:2.5rem}
+footer{border-top:1px solid var(--rule);padding-block:2.5rem 0}
 footer .body{display:flex;flex-direction:column;gap:1.4rem;font-size:.98rem;line-height:1.55}
 footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 @media (max-width:900px){
-  .hero,.part,footer{grid-template-columns:minmax(0,1fr)}
-  .rail{position:static;margin-bottom:1.1rem}
+  .hero,.main{grid-template-columns:minmax(0,1fr)}
+  .toc{position:static;padding:0 0 2.2rem}
+  .toc ol{columns:2;column-gap:1.5rem}
+  .toc li{break-inside:avoid}
   .two{grid-template-columns:minmax(0,1fr)}
   .build{grid-template-columns:minmax(0,1fr)}
   .verbs{flex-direction:row;flex-wrap:wrap;width:auto;margin-top:0}
@@ -242,7 +251,7 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 <div class="wrap">
 
 <header class="hero">
-  <div class="rail" aria-hidden="true"><span class="path">halfway-cycles/</span></div>
+  <div aria-hidden="true"></div>
   <div class="hero-main">
     <p class="mono c" style="font-size:.82rem;letter-spacing:.04em">THE OPEN KNOWLEDGE FORMAT, EXPLAINED WITH A BIKE SHOP</p>
     <h1>A folder that knows what it knows</h1>
@@ -251,9 +260,12 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
   </div>
 </header>
 
+<div class="main">
+<nav class="toc" aria-label="Sections"><div class="lab">On this page</div><ol id="toc"></ol></nav>
+<div class="col">
+
 <!-- ───────────── 0. why ───────────── -->
 <section class="part" id="why" data-part="why">
-  <div class="rail"></div>
   <div class="body">
     <h2>Why write it down this way</h2>
     <div class="prose">
@@ -274,13 +286,13 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 1. one file ───────────── -->
 <section class="part" id="one-file" data-part="one-file">
-  <div class="rail"></div>
   <div class="body">
     <h2>Start with one page</h2>
     <div class="prose">
-      <p>OKF calls each page a concept. A concept can describe something you could point at, like a database table, or an idea, like how the shop defines a number. This one defines how long a repair takes. Select any line to see what it is for.</p>
+      <p>OKF calls each page a concept. A concept can describe something you could point at, like a database table, or an idea, like how the shop defines a number. This one defines how long a repair takes.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>Select any line to see what it is for.</p>
       <div class="row">
         <div class="seg" role="group" aria-label="How much of the page to show">
           <button class="btn" id="f-full" aria-pressed="true">Full page</button>
@@ -303,14 +315,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 1b. what goes in the folder ───────────── -->
 <section class="part" id="layout" data-part="layout">
-  <div class="rail"></div>
   <div class="body">
     <h2>What goes in the folder</h2>
     <div class="prose">
       <p>The whole folder is called a bundle. You can organize it however suits the subject. The shop sorts its pages into tables, metrics, computations, playbooks and policies, and OKF has no opinion about those names or how deep they go. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
-      <p>Around the pages sit four small files that do the housekeeping. Two are OKF's own: it reserves their names, and both are optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> Two are older habits that sit comfortably beside it. Open each one.</p>
+      <p>Around the pages sit four small files that do the housekeeping. Two are OKF's own: it reserves their names, and both are optional. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#31-reserved-filenames">§3.1</a> Two are older habits that sit comfortably beside it.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>Open each of the four housekeeping files.</p>
       <div class="two u-two">
         <div class="file">
           <div class="file-tab"><span>halfway-cycles/</span><span id="a-count"></span></div>
@@ -331,15 +343,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 2. the folder ───────────── -->
 <section class="part" id="the-folder" data-part="the-folder">
-  <div class="rail"></div>
   <div class="body">
     <h2>A folder an agent can walk</h2>
     <div class="prose">
       <p>The index is what keeps an agent from reading everything. It reads the top listing, picks a folder, reads that folder's listing, and opens the one page it needs.</p>
       <p>Folders say where a page lives. Links say what it has to do with other pages. A link is an ordinary markdown link, and the sentence around it says what the relationship is: this metric is computed from that table, this playbook follows that policy. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#61-links-between-concepts">§6.1</a> An agent uses both. The listings get it to the right page, and a link in that page takes it to the next one.</p>
-      <p>Pick a question and watch the path it takes. Then switch to the map to see the same pages arranged by what they link to.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>Pick a question and watch the path it takes. Then switch to the map to see the same pages arranged by their links.</p>
       <div class="seg" role="group" aria-label="Question to ask" id="q-seg"></div>
       <div class="row">
         <span class="cap">Show the bundle</span>
@@ -379,15 +390,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 3. trust ───────────── -->
 <section class="part" id="trust" data-part="trust">
-  <div class="rail"></div>
   <div class="body">
     <h2>Who wrote it, who checked it, and is it still true</h2>
     <div class="prose">
       <p>A folder that agents keep rewriting raises questions a plain note never had to answer. Version 0.2 answers them with three header lines. <code>generated</code> says who or what wrote the page. <code>verified</code> lists who has checked it against its sources. <code>stale_after</code> is the date after which nobody should take it on faith. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#5-provenance-trust-and-lifecycle">§5</a></p>
       <p>A reader works out a trust level from <code>verified</code> alone. No entry means unverified. Entries from machines only means machine-confirmed. Any entry from a person means human-reviewed. Staleness is a separate question: a page the owner signed off in January can still be out of date by September.</p>
-      <p>Drag the date and watch the shop's bundle age. Then pick a page and sign it off yourself.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>Drag the date and watch the shop's bundle age. Then pick a page and sign it off yourself.</p>
       <div class="clock">
         <label for="t-range">The date a reader opens the bundle</label>
         <output id="t-date" for="t-range"></output>
@@ -419,15 +429,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 4. building ───────────── -->
 <section class="part" id="first-draft" data-part="first-draft">
-  <div class="rail"></div>
   <div class="body">
     <h2>Letting an agent write the first draft</h2>
     <div class="prose">
       <p>Nobody wants to write two hundred of these pages by hand. The OKF repository includes a sample agent that drafts a bundle for you. Its example reads a Google BigQuery database, but the shape of the work is not tied to any product.</p>
       <p>The agent asks a source three things: what do you have, tell me about this one, and show me a little of it. Then it writes one page per thing it found. A second pass reads the documentation around the source and decides, page by page, whether to add to an existing concept, write a new reference page, or skip it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format#how-the-reference-agent-works">README</a></p>
-      <p>Swap the source. The three questions stay the same.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>Swap the source. The three questions stay the same.</p>
       <div class="row">
         <div class="seg" role="group" aria-label="Source to explore" id="b-seg"></div>
         <button class="btn" id="b-run">Run it again</button>
@@ -449,19 +458,16 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 5. upkeep ───────────── -->
 <section class="part" id="upkeep" data-part="upkeep">
-  <div class="rail"></div>
   <div class="body">
     <h2>Then someone has to keep it current</h2>
     <div class="prose">
-      <p>A first draft is the easy part. Shops change their prices, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects this. It describes knowledge that agents keep writing and rewriting, not something authored once and left alone. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
-      <p>Plain text is what makes that workable. A person and a model read the same file, so the model can do the bookkeeping and the person only has to read what changed. Keep the folder in git, on GitHub or anywhere else, and every change arrives as a diff: which lines went, which came in, who made the change, and when. The specification recommends git for exactly that and does not require it. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
-      <p>Git is also what keeps a team in step. Everyone, and every agent, works on a copy and sends changes back to a shared one. Two people's edits are merged, and where they collide git says so instead of quietly keeping one. A host such as GitHub adds a place to review a change before it lands. None of this is OKF's own machinery, and the specification never names a host. It comes free with being plain text.</p>
-    </div>
-    <div class="prose" style="margin-top:2.2rem">
-      <p>Here is one change, followed all the way through, with the four housekeeping files doing their jobs. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words. Select a file to see what happened to it.</p>
+      <p>A first draft is the easy part. Prices change, tables gain columns, and a folder nobody tends is wrong within a year. The specification expects agents to keep rewriting these pages, not to write them once. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#1-motivation">§1</a></p>
+      <p>Plain text is what makes that workable. A person and a model read the same file, so the model does the bookkeeping and the person reads what changed. Keep the folder in git, on GitHub or anywhere else, and each change arrives as a diff with a name and a date on it. A team stays in step the same way: everyone, and every agent, sends changes to one shared copy, and git flags the collisions. The specification recommends git, names no host, and requires neither. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#3-bundle-structure">§3</a></p>
+      <p>Here is one change, followed all the way through. The shop starts taking e-bikes, and Mara, the owner, tells the shop's agent in a few words.</p>
     </div>
     <div class="fig">
       <p class="ask"><span class="c">Mara, to the agent</span>&ldquo;We take e-bikes from this week. $110 an hour. Write up how we handle them.&rdquo;</p>
+      <p class="cue"><b>Try it</b>Select a file to see what happened to it. Then switch to the owner's sign-off.</p>
       <div class="seg" role="group" aria-label="Which commit to show" id="u-seg"></div>
       <div class="two u-two">
         <div class="file">
@@ -489,15 +495,14 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 6. numbers ───────────── -->
 <section class="part" id="numbers" data-part="numbers">
-  <div class="rail"></div>
   <div class="body">
     <h2>A number that can show its work</h2>
     <div class="prose">
       <p>Definitions are one problem. Numbers are a harder one. Ask an agent how long repairs took last month and it can write its own query, get a believable answer, and be wrong.</p>
       <p>OKF's answer is a page type called an Attested Computation. It holds the approved calculation and names the blanks an agent may fill in. The agent supplies values for the blanks and nothing else. Then a small piece of ordinary code, with no AI in it, compares what actually ran against what was approved. <a class="ref" href="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md#10-attested-computations-concept">§10</a></p>
-      <p>The shop keeps its work orders in a Postgres database. Run the calculation both ways.</p>
     </div>
     <div class="fig">
+      <p class="cue"><b>Try it</b>The shop's work orders live in a Postgres database. Run the calculation as written, then let the agent improvise.</p>
       <div class="two">
         <div class="file">
           <div class="file-tab"><span>computations/turnaround-median.md</span><span class="stamp t-human">human-reviewed</span></div>
@@ -530,7 +535,6 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
 
 <!-- ───────────── 7. edges ───────────── -->
 <section class="part" id="edges" data-part="edges">
-  <div class="rail"></div>
   <div class="body">
     <h2>What it leaves out on purpose</h2>
     <div class="prose">
@@ -547,10 +551,18 @@ footer ul{margin:.3rem 0 0;padding-left:1.2rem}
     <div class="prose" style="margin-top:2.2rem">
       <h3>What teams add on top</h3>
       <p>Most teams layer house rules over the format: a fixed list of page types, a check date on single facts instead of whole pages, a rule that the log is only ever added to, a line saying which of two overlapping pages wins. None of that is in the specification, and none of it breaks it. It helps to know which rules are OKF and which are yours.</p>
-      <h3 style="margin-top:1rem">Start one by pointing an agent at what you have</h3>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── start ───────────── -->
+<section class="part" id="start" data-part="start">
+  <div class="body">
+    <h2>Point an agent at what you have</h2>
+    <div class="prose">
       <p>You do not write the first pages by hand. You read them. The steps are the ones from the first-draft section, with your own source in place of the bike shop's.</p>
     </div>
-    <div class="fig" style="margin-top:1rem">
+    <div class="fig">
       <ol class="steps">
         <li>Pick one source people keep asking you about: a database, a shared drive, a codebase, a wiki.</li>
         <li>Give an agent read access to it, and the brief below. Any capable agent will do. The format does not care which.</li>
@@ -582,7 +594,6 @@ Follow it wherever this brief is silent.</pre>
 </section>
 
 <footer>
-  <div class="rail" style="position:static"></div>
   <div class="body">
     <div>
       <h3>Sources</h3>
@@ -596,6 +607,9 @@ Follow it wherever this brief is silent.</pre>
 </footer>
 
 </div>
+</div>
+
+</div>
 
 <script>
 (function(){
@@ -605,31 +619,26 @@ var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").
 var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,calm?0:ms)})};
 var SPEC="https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md";
-var WRITTEN="2026-11-10T18:15:00Z";
 
-/* ───────── the essay as a bundle: section headers ───────── */
-var PARTS={
-  "why":{title:"Why write it down this way",desc:"What a folder of plain text pages gets you, and where this page shows each point.",src:["1","README"]},
-  "one-file":{title:"Start with one page",desc:"What a single OKF concept looks like, line by line.",src:["4","5","11"]},
-  "layout":{title:"What goes in the folder",desc:"Pages, plus four housekeeping files: index, log, README and AGENTS.",src:["3","8","9","11"]},
-  "the-folder":{title:"A folder an agent can walk",desc:"Index files, links between pages, and reading only what a question needs.",src:["6","8"]},
-  "trust":{title:"Who wrote it, who checked it, and is it still true",desc:"The generated, verified, and stale_after lines, and the trust levels readers derive.",src:["5","7"]},
-  "first-draft":{title:"Letting an agent write the first draft",desc:"The explore-and-draft pattern from the sample agent, generalized beyond one database.",src:["README","base.py"]},
-  "upkeep":{title:"Then someone has to keep it current",desc:"One change followed through git: the agent's commit, then the owner's sign-off.",src:["1","3","5"]},
-  "numbers":{title:"A number that can show its work",desc:"Attested Computations: approved calculations and a mechanical check that they ran.",src:["10"]},
-  "edges":{title:"What it leaves out on purpose",desc:"Non-goals, permissive conformance, and how to start one with an agent.",src:["1","11"]}
-};
-Object.keys(PARTS).forEach(function(id){
-  var p=PARTS[id], sec=document.querySelector('[data-part="'+id+'"]'), rail=sec.querySelector(".rail");
-  var y="---\ntype: Essay Section\ntitle: "+p.title+"\ndescription: "+p.desc+"\ngenerated: { by: claude/fable-5.2, at: "+WRITTEN+" }\nsources:\n"+
-    p.src.map(function(s){
-      var isSec=/^\d+$/.test(s);
-      return "  - id: "+(isSec?"spec-"+s:s.replace(".","-").toLowerCase())+"\n    title: "+(isSec?"OKF v0.2 specification, section "+s:"OKF repository, "+s);
-    }).join("\n")+"\n---";
-  rail.innerHTML='<span class="path">essay/<b>'+id+'.md</b></span><button class="hdr-toggle" aria-expanded="false">Show header</button><pre class="hdr" hidden></pre>';
-  var b=rail.querySelector("button"), pre=rail.querySelector("pre"); pre.textContent=y;
-  b.addEventListener("click",function(){var open=pre.hidden; pre.hidden=!open; b.setAttribute("aria-expanded",String(open)); b.textContent=open?"Hide header":"Show header";});
+/* ───────── section navigation ───────── */
+var NAV=[["why","Why"],["one-file","One page"],["layout","In the folder"],["the-folder","Walking it"],["trust","Trust"],["first-draft","First draft"],["upkeep","Upkeep"],["numbers","Numbers"],["edges","Left out on purpose"],["start","Start one"]];
+$("toc").innerHTML=NAV.map(function(n,i){return '<li><a href="#'+n[0]+'" data-id="'+n[0]+'"><span class="n">'+(i+1)+"</span><span>"+n[1]+"</span></a></li>"}).join("");
+NAV.forEach(function(n,i){
+  var h=$(n[0]).querySelector("h2"), k=document.createElement("p");
+  k.className="kick"; k.textContent=(i+1)+" of "+NAV.length; h.parentNode.insertBefore(k,h);
 });
+(function(){
+  var links=$("toc").querySelectorAll("a");
+  var mark=function(id){links.forEach(function(a){if(a.dataset.id===id)a.setAttribute("aria-current","true"); else a.removeAttribute("aria-current");})};
+  $("toc").addEventListener("click",function(e){
+    var a=e.target.closest("a"); if(!a)return;
+    e.preventDefault(); $(a.dataset.id).scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});
+  });
+  // the current section is the last one whose top has passed a quarter of the way down the window
+  var secs=NAV.map(function(n){return $(n[0])});
+  var sync=function(){var y=window.innerHeight*.25, cur=null; secs.forEach(function(x){if(x.getBoundingClientRect().top<=y)cur=x.id}); mark(cur);};
+  window.addEventListener("scroll",sync,{passive:true}); window.addEventListener("resize",sync); sync();
+})();
 
 /* ───────── the bike shop bundle ───────── */
 var DIRS=[
